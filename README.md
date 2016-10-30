@@ -2,7 +2,7 @@
 LTE test bed in Python
 
 This test bed is based on LTE Release 12 (version 12.2.0).
-It implements the LTE physical layer, MAC layer and RRC layer in Python.
+It implements the LTE physical layer, MAC layer and RRC layer in Python (Cython backend).
 
 Conforms with the following 3GPP Specifications:
 - TS 36.211 - Physical layer channel modulation
