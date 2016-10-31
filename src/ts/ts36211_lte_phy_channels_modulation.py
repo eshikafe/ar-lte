@@ -1,4 +1,4 @@
-# ts36211.py
+# ts36211_lte_phy_channels_modulation.pyx
 # 
 # TS 36.211: Physical channels and modulation 
 #    The scope of this specification is to establish the characteristics of the Layer-1 physical channels, 
@@ -31,12 +31,13 @@
 #  
 #  # Copyright (c) 2015 - 2016 Austin Aigbe (eshikafe@gmail.com)
 
+import cython
 
-import math
+from libc.math cimport *
 
 # Frame structure (4)
-Ts = 1/(15000*2048) # seconds (basic time unit)
-Tf = 307200 * Ts    # 10ms duration (radio frame duration)
+Ts = cython.declare(cython.double, 1/(15000*2048)) # seconds (basic time unit)
+Tf = cython.declare(cython.double, 307200 * Ts)    # 10ms duration (radio frame duration)
 
 LTE_PHY_RADIO_FRAME_TYPE1 = "FDD"
 LTE_PHY_RADIO_FRAME_TYPE2 = "TDD"
@@ -67,11 +68,11 @@ T_slot = 15360 * Ts # 0.5ms (radio frame type1/type2 slot duration)
 #   from higher layers.
 # Reference signal
 
-Nc = 1600
+Nc = cython.declare(cython.int, 1600)
 
-_a = 1/math.sqrt(2)
-_b = 1/math.sqrt(10)
-_c = 1/math.sqrt(42)
+_a = cython.declare(cython.double,1/math.sqrt(2))
+_b = cython.declare(cython.double,1/math.sqrt(10))
+_c = cython.declare(cython.double,1/math.sqrt(42))
 
 # BPSK - TS 36.211 V12.2.0, section 7.1.1, Table 7.1.1-1
 _bpsk = (complex(_a,_a), complex(-_a,-_a))
