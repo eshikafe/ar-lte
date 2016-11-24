@@ -25,3 +25,4 @@ Use cases:
 - Embedded IOT research.
 - OpenCellular
 - USRP
+- erlEPC (https://github.com/eshikafe/erlEPC)
