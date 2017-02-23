@@ -19,8 +19,7 @@ Use cases:
 - USSD over LTE testing.
 - UE compliance testing. 
 - 4G communication lab for Universities and research Labs. 
-- Low cost LTE base stations for operators. 
-- Low power home eNB implementation.
+- Low cost eNodeB implementation (1.3L slim PC DH170 + USRP B210).
 - LTE security research. 
 - Embedded IOT research.
 - OpenCellular
