@@ -6,7 +6,7 @@
 # Copyright (c) 2016 Austin Aigbe (eshikafe@gmail.com)
 #
 
-cimport rohc
+from lib.rfc cimport rfc3095_rohc as rohc
 
 release = (12,2,0)
 
