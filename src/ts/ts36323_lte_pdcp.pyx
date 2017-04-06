@@ -6,6 +6,8 @@
 # Copyright (c) 2016 Austin Aigbe (eshikafe@gmail.com)
 #
 
+cimport rohc
+
 release = (12,2,0)
 
 
@@ -187,58 +189,53 @@ cdef class PDCPEntity:
         # per PDCP entity is running at a given time. 
         cdef uint self.tReordering = timer.tReordering
         
-    # Transmitting
+    # Transmitting (i.e Downlink)
     
-    cpdef sequence_numbering(self):
+    cpdef tx_sequence_numbering(self):
         #TODO
 
-    cpdef header_compression(self):
+    cpdef tx_header_compression(self):
         # User plane only
         if self.pdcp_pdu.plane == PDCP_USER_PLANE and self.pdcp_pdu.plane.direction == PDCP_TX:
             if self.pdcp_pdu.pdps.sdu_type == SDU_TYPE_IP:
-                RoHC(self.pdcp_sdu)
+                rohc.compressor(self.pdcp_sdu)
 
-    def integrity_protection(self, pd):
+    def tx_integrity_protection(self, pd):
         # Control plane only
         
-    def ciphering(self, pdcp_data):
+    def tx_ciphering(self, pdcp_data):
         # TODO
 
-    def add_pdcp_header(self, pdcp_data):
+    def tx_add_pdcp_header(self, pdcp_data):
         # TODO
 
-    def routing(self, pdcp_data):
+    def tx_routing(self, pdcp_data):
         # TODO
 
-    # Receiving
+    # Receiving (i.e Uplink)
 
-    def remove_pdcp_header(self, pdcp_data):
+    def rx_remove_pdcp_header(self, pdcp_data):
         # TODO
         
-    def deciphering(self, pdcp_data):
+    def rx_deciphering(self, pdcp_data):
         # TODO
 
-    def integrity_verification(self, pdcp_data):
+    def rx_integrity_verification(self, pdcp_data):
         # Inputs: COUNT and direction (TS 36.323 5.7)
         # Control plane only
         # TODO
 
-    def reordering(self, pdcp_data):
+    def rx_reordering(self, pdcp_data):
         # User plane only
         # TODO
 
-    def header_decompression(self, pdcp_data):
+    def rx_header_decompression(self, pdcp_data):
+        # User plane only
+        rohc.decompressor(pdcp_data)
+
+    def rx_in_order_delivery_duplicate_detection(self, pdcp_data):
         # User plane only
         # TODO
 
-    def in_order_delivery_duplicate_detection(self, pdcp_data):
-        # User plane only
-        # TODO
-
-cpdef robust_header_compression(char* pkts):
-    # TODO
-
-cpdef RoHC(char* pkts):
-    robust_header_compression(pkts)
     
     

@@ -29,11 +29,10 @@
 #
 #	Input to the physical layer: codewords
 #  
-#  # Copyright (c) 2015 - 2016 Austin Aigbe (eshikafe@gmail.com)
+#  # Copyright (c) 2015 - 2017 Austin Aigbe
 
 import cython
-
-from libc.math cimport *
+import math
 
 # Frame structure (4)
 Ts = cython.declare(cython.double, 1/(15000*2048)) # seconds (basic time unit)
@@ -106,7 +105,7 @@ _64qam = (complex(3*_c,3*_c), complex(3*_c,_c), complex(_c,3*_c), complex(_c,_c)
            complex(-5*_c,-5*_c), complex(-5*_c,-7*_c), complex(-7*_c,-5*_c), complex(-7*_c,-7*_c)
         )
 
-class Scrambling:
+class PhysicalLayerScrambling:
     def __init__(self, cinit, _b):
         self.cinit = cinit
         self.mbits = len(_b)
@@ -152,7 +151,7 @@ class Scrambling:
         return x1 # '0x54d21b24' = hex(x1)
         
 
-class Modulation:
+class PhysicalLayerModulation:
     """
     Modulation mapper (TS 36.211 V12.2.0 7.1)
     The modulation mapper takes binary digits, 0 or 1, as input
@@ -186,21 +185,21 @@ class Modulation:
         r = [_64qam[_b[i]*32 + _b[i+1]*16 + _b[i+2]*8 + _b[i+3]*4 + _b[i+4]*2 + _b[i+5]] for i in range(0, self.nbits, 4)]  
         return r
                
-class LayerMapping:
+class PhysicalLayerLayerMapping:
     pass
-class Precoding:
+class PhysicalLayerPrecoding:
     pass
-class ResourceElementMapping:
+class PhysicalLayerResourceElementMapping:
     pass
-class OFDMSignalGenerator:
+class PhysicalLayerOFDMSignalGenerator:
     pass
 
 # Test
-# s = Scrambling(100,[1,1,0,1,1,0,0,0])
+# s = PhysicalLayerScrambling(100,[1,1,0,1,1,0,0,0])
 # sb = s.scramble()
 
-# m = Modulation(sb)
-# msb = m.lte_phy_mod_16qam()
+# m = PhysicalLayerModulation(sb)
+# msb = m.mod_16qam()
 
 # print sb
 # print msb
