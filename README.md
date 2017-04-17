@@ -14,6 +14,13 @@ Conforms with the following 3GPP Specifications:
 - TS 36.331 - RRC protocol
 - TS 36.323 - PDCP protocol
 
+ITU:
+- X.680 - ASN1
+- X.691 - ASN1 Per encoding
+
+RFC:
+- RFC 3095 - RoHC (Robust Header Compression)
+
 Use cases:
 - Spectrum refarming research.
 - USSD over LTE testing.
