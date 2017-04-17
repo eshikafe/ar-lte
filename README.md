@@ -16,7 +16,7 @@ Conforms with the following 3GPP Specifications:
 
 ITU:
 - X.680 - ASN1
-- X.691 - ASN1 Per encoding
+- X.691 - ASN1 PER encoding
 
 RFC:
 - RFC 3095 - RoHC (Robust Header Compression)
