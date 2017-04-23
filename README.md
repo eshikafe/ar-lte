@@ -1,6 +1,8 @@
 # pyLTE
 LTE Test Bed Platform
 
+**This is a work in progress!**
+
 This test bed is based on LTE Release 12 (version 12.2.0).
 It implements the LTE physical layer, MAC layer and RRC layer in Python.
 
