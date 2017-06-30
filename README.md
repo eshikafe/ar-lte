@@ -37,5 +37,5 @@ Use cases:
 - Cloud RAN
 - mmWave
 
-
-* Architecture
+**Architecture**
+<img src='https://github.com/eshikafe/pyLTE/blob/master/pyLTE-arch-02.png' alt='pyLTE Architecture' title='pyLTE Architecture' />
