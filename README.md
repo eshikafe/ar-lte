@@ -33,7 +33,7 @@ Use cases:
 - Embedded IOT research.
 - RaspberryPi, USRP, OpenCellular
 - erlEPC (https://github.com/eshikafe/erlEPC)
-- Cloud RAN
+- Virtualized RAN
 - mmWave Research
 
 **Architecture**
