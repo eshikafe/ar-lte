@@ -31,11 +31,10 @@ Use cases:
 - Low cost eNodeB implementation (1.3L slim PC DH170 + USRP B210).
 - LTE security research. 
 - Embedded IOT research.
-- OpenCellular
-- USRP
+- RaspberryPi, USRP, OpenCellular
 - erlEPC (https://github.com/eshikafe/erlEPC)
 - Cloud RAN
-- mmWave
+- mmWave Research
 
 **Architecture**
 <img src='https://github.com/eshikafe/pyLTE/blob/master/pyLTE-arch-02.png' alt='pyLTE Architecture' title='pyLTE Architecture' />
