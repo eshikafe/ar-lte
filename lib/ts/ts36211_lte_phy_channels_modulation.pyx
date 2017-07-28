@@ -20,29 +20,33 @@
 #		Reference: 3GPP TS 36.201 version 12.2.0 Release 12, Section 5.3
 #				
 # Physical layer processing:
-#	scrambling
-#	modulation
-#	layer mapping
-#	precoding
-#	mapping to resource elements
-#	OFDM signal generation
+#	  scrambling
+#	  modulation
+#	  layer mapping
+#	  precoding
+#	  mapping to resource elements
+#	  OFDM signal generation
 #
 #	Input to the physical layer: codewords
 #  
 #  # Copyright (c) 2015 - 2017 Austin Aigbe
 
-import cython
-import math
+from libc.math cimport *
+from libc.stdint cimport *
+from ts36101_ue_radio_tx_reception cimport *
+
+
 
 # Frame structure (4)
-Ts = cython.declare(cython.double, 1/(15000*2048)) # seconds (basic time unit)
-Tf = cython.declare(cython.double, 307200 * Ts)    # 10ms duration (radio frame duration)
+cdef double Ts =  1/(15000*2048) # seconds (basic time unit)
+cdef double Tf = 307200 * Ts    # 10ms duration (radio frame duration)
 
 LTE_PHY_RADIO_FRAME_TYPE1 = "FDD"
 LTE_PHY_RADIO_FRAME_TYPE2 = "TDD"
 
-LTE_PHY_FDD_HALF_DUPLEX = 0
-LTE_PHY_FDD_FULL_DUPLEX = 1
+cdef enum:
+  LTE_PHY_FDD_HALF_DUPLEX
+  LTE_PHY_FDD_FULL_DUPLEX
 
 # Frame structure type 1 (4.1)
 # 
@@ -52,26 +56,38 @@ LTE_PHY_FDD_FULL_DUPLEX = 1
 #   
 #   For FDD, DL transmission = 10 subframes, UL transmission = 10 subframes
 #   in each Tf interval
-T_slot = 15360 * Ts # 0.5ms (radio frame type1/type2 slot duration)
+cdef double T_slot = 15360 * Ts # 0.5ms (radio frame type1/type2 slot duration)
 
 # Uplink physical channels (5.1.1)
-#   A set of resource elements (RE) carrying information originating 
-#   from higher layers.
-#   Interface = between ts36212 and ts36211
 # PUSCH
 # PUCCH
 # PRACH
+#
+# UL Physical channel:
+# resource_elements
+# sets of resource_elements
+# Transmitted signal/slot:
+#   resource grid:
+#     N_UL_RB*N_RB_SC
+#     num_uplink_symb (N_UL_symb)
+#     N_UL_RB:
+#       uplink tx bw configured in the cell
+# SC-FDMA symbols in a slot depends on
+# UL_CyclicPrefixLength Table 5.2.3.1
 # 
-# Uplink physical signals (5.1.2) 
-#   used by the physical layer but does not carry information originating
-#   from higher layers.
-# Reference signal
+#  Antenna port
+#  1 resource grid per ant_port
+#  num_ant_port
+#  ant_port used for tx of a phy channel
+#  
+#  
 
-Nc = cython.declare(cython.int, 1600)
 
-_a = cython.declare(cython.double,1/math.sqrt(2))
-_b = cython.declare(cython.double,1/math.sqrt(10))
-_c = cython.declare(cython.double,1/math.sqrt(42))
+cdef int Nc = 1600
+
+cdef double _a = 1/sqrt(2)
+cdef double _b = 1/sqrt(10)
+cdef double _c = 1/sqrt(42)
 
 # BPSK - TS 36.211 V12.2.0, section 7.1.1, Table 7.1.1-1
 _bpsk = (complex(_a,_a), complex(-_a,-_a))
@@ -105,22 +121,27 @@ _64qam = (complex(3*_c,3*_c), complex(3*_c,_c), complex(_c,3*_c), complex(_c,_c)
            complex(-5*_c,-5*_c), complex(-5*_c,-7*_c), complex(-7*_c,-5*_c), complex(-7*_c,-7*_c)
         )
 
-class PhysicalLayerScrambling:
-    def __init__(self, cinit, _b):
+cdef class PhysicalLayerScrambling:
+    cdef int cinit
+    cdef int mbits
+    def __init__(self, int cinit, _b):
         self.cinit = cinit
         self.mbits = len(_b)
         self._b = _b
         
-    def scramble(self):
+    cdef scramble(self):
         # sb[i] = (_b[i] + _c[i]) mod 2
         _c = self._pseudo_random_sequence()
         sb = []
         sb = [self._b[i]^_c[i] for i in range(self.mbits)]
         return sb
     
-    def _pseudo_random_sequence(self):
+    cdef _pseudo_random_sequence(self):
         # TS 36.211 V12.2.0, section 7.2
         # Pseudo-random sequences are defined by _a length-31 Gold sequence
+        cdef int i
+        cdef int x1, n1, x2, n2
+
         x1 = self._x1()
         x2 = self._x2()
         _c = []
@@ -133,17 +154,19 @@ class PhysicalLayerScrambling:
             _c.append(n1 ^ n2)
         return _c
         
-    def _x2(self):
+    cdef _x2(self):
         x2 = self.cinit
+        cdef int i = 0
         for i in range(Nc-31):
             # Advance the 2nd m-sequence
             n = ((x2 >> 3)^(x2 >> 2)^(x2 >> 1)^x2) & 0x1
             x2 = (x2 >> 1) | (n << 30)
         return x2
             
-    def _x1(self):
+    cdef _x1(self):
         # The first m-sequence shall be initialized with x1(0)=1,x1(n)=0,n=1,2,...,30.
-        x1=1
+        cdef int x1=1
+        cdef int i
         # Advance the 1st m-sequence
         for i in range(Nc-31):
             n = ((x1 >> 3)^(x1)) & 0x01
@@ -151,7 +174,7 @@ class PhysicalLayerScrambling:
         return x1 # '0x54d21b24' = hex(x1)
         
 
-class PhysicalLayerModulation:
+class PhysicalLayerModulationMapper:
     """
     Modulation mapper (TS 36.211 V12.2.0 7.1)
     The modulation mapper takes binary digits, 0 or 1, as input
@@ -164,24 +187,28 @@ class PhysicalLayerModulation:
     def mod_bpsk(self):
         r = []
         _b= self.sbits
+        # 1 bit at a time
         r = [_bpsk[_b[i]] for i in range(self.nbits)]
         return r
     
     def mod_qpsk(self):
         r = []
         _b = self.sbits
+        # 2 bits at a time
         r = [_qpsk[_b[i]*2 + _b[i+1]] for i in range(0, self.nbits, 2)]  
         return r
     
     def mod_16qam(self):
         r = []
         _b = self.sbits
+        # 4 bits at a time
         r = [_16qam[_b[i]*8 + _b[i+1]*4 + _b[i+2]*2 + _b[i+3]] for i in range(0, self.nbits, 4)]  
         return r
         
     def mod_64qam(self):
         r = []
         _b = self.sbits
+        # 6 bits at a time
         r = [_64qam[_b[i]*32 + _b[i+1]*16 + _b[i+2]*8 + _b[i+3]*4 + _b[i+4]*2 + _b[i+5]] for i in range(0, self.nbits, 4)]  
         return r
                
