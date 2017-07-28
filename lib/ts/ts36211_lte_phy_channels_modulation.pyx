@@ -29,7 +29,7 @@
 #
 #	Input to the physical layer: codewords
 #  
-#  # Copyright (c) 2015 - 2017 Austin Aigbe
+#  # Copyright (c) 2015 - 2017 Aigbe Research
 
 from libc.math cimport *
 from libc.stdint cimport *
