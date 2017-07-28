@@ -15,18 +15,16 @@ release = (12,2,0)
 cdef int REORDERING_WINDOW_PDCP_SN_12 = 2048
 cdef int REORDERING_WINDOW_PDCP_SN_15 = 16384
 
-cdef int MAXIMUM_PDCP_SN_16 = 65535
-cdef int MAXIMUM_PDCP_SN_15 = 32767
-cdef int MAXIMUM_PDCP_SN_12 = 4095
-cdef int MAXIMUM_PDCP_SN_7 = 127
-cdef int MAXIMUM_PDCP_SN_5 = 31
+cdef int MAX_PDCP_SN_16 = 65535
+cdef int MAX_PDCP_SN_15 = 32767
+cdef int MAX_PDCP_SN_12 = 4095
+cdef int MAX_PDCP_SN_7 = 127
+cdef int MAX_PDCP_SN_5 = 31
 
 cdef int MAXIMUM_PDCP_SN[5]
-MAXIMUM_PDCP_SN[:]= [MAXIMUM_PDCP_SN_16,
-                     MAXIMUM_PDCP_SN_15,
-                     MAXIMUM_PDCP_SN_12,
-                     MAXIMUM_PDCP_SN_7,
-                     MAXIMUM_PDCP_SN_5]
+MAXIMUM_PDCP_SN[:]= [MAX_PDCP_SN_16, MAX_PDCP_SN_15,
+                     MAX_PDCP_SN_12, MAX_PDCP_SN_7,
+                     MAX_PDCP_SN_5]
 
 cdef enum:
     SFN_16 = 0
