@@ -3,7 +3,7 @@
 # 3GPP LTE Packet Data Convergence Protocol in Python
 # TS 36.323, 3GPP Release 12.2.0
 #
-# Copyright (c) 2016 Austin Aigbe (eshikafe@gmail.com)
+# Copyright (c) 2016 Aigbe Research
 #
 
 from lib.rfc import rfc3095_rohc as rohc
@@ -186,52 +186,56 @@ cdef class PDCPEntity:
         # t-Reordering shall not be started additionally, i.e. only one tReordering
         # per PDCP entity is running at a given time. 
         cdef uint self.tReordering = timer.tReordering
-        
+
+    # -----------------------------    
     # Transmitting (i.e Downlink)
-    
-    cpdef tx_sequence_numbering(self):
+    # ----------------------------
+    cpdef sequence_numbering(self):
         #TODO
 
-    cpdef tx_header_compression(self):
+    # RoHC compressor
+    cpdef header_compression(self):
         # User plane only
         if self.pdcp_pdu.plane == PDCP_USER_PLANE and self.pdcp_pdu.plane.direction == PDCP_TX:
             if self.pdcp_pdu.pdps.sdu_type == SDU_TYPE_IP:
                 rohc.compressor(self.pdcp_sdu)
 
-    def tx_integrity_protection(self, pd):
+    def integrity_protection(self, pd):
         # Control plane only
         
-    def tx_ciphering(self, pdcp_data):
+    def ciphering(self, pdcp_data):
         # TODO
 
-    def tx_add_pdcp_header(self, pdcp_data):
+    def add_pdcp_header(self, pdcp_data):
         # TODO
 
-    def tx_routing(self, pdcp_data):
+    def routing(self, pdcp_data):
         # TODO
 
+    # -----------------------
     # Receiving (i.e Uplink)
-
-    def rx_remove_pdcp_header(self, pdcp_data):
+    # -----------------------
+    def remove_pdcp_header(self, pdcp_data):
         # TODO
         
-    def rx_deciphering(self, pdcp_data):
+    def deciphering(self, pdcp_data):
         # TODO
 
-    def rx_integrity_verification(self, pdcp_data):
+    def integrity_verification(self, pdcp_data):
         # Inputs: COUNT and direction (TS 36.323 5.7)
         # Control plane only
         # TODO
 
-    def rx_reordering(self, pdcp_data):
+    def reordering(self, pdcp_data):
         # User plane only
         # TODO
 
-    def rx_header_decompression(self, pdcp_data):
+    # RoHC decompressor
+    def header_decompression(self, pdcp_data):
         # User plane only
         rohc.decompressor(pdcp_data)
 
-    def rx_in_order_delivery_duplicate_detection(self, pdcp_data):
+    def in_order_delivery_duplicate_detection(self, pdcp_data):
         # User plane only
         # TODO
 

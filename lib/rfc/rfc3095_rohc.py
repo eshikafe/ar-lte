@@ -4,7 +4,7 @@
 #
 # pyLTE
 #
-# Copyright (c) 2017 Austin Aigbe
+# Copyright (c) 2017 Aigbe Research
 
 def compressor(pkt):
     # TODO
@@ -13,3 +13,6 @@ def compressor(pkt):
 def decompressor(pkt):
     # TODO
     pass
+
+def initialize():
+	pass
