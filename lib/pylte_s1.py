@@ -33,7 +33,7 @@ class S1UserPlaneMessageHandler(SocketServer.BaseRequestHandler):
 		if data:
 			msg = s1_u.get_message(data, self.client_address)
 			logger.info("Src: %s, Dest: %s, Received message: %s, teid: %s", self.client_address, (s1u_host, s1u_port), s1_u.message_type[msg['header']['MT']], msg['header']['TEID'])
-			print msg
+			
 			#response = s1_u.handle_request(msg)
 			#socket.sendto(response['raw'], self.client_address)
 			#logger.info("Src: %s, Dest: %s, Sent message: %s, teid: %s", (s1u_host, s1u_port), self.client_address, s1_u.message_type[response['header']['MT']], response['header']['TEID'])
