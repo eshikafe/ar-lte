@@ -89,6 +89,7 @@ class GTPv1:
 
 
 	def get_message(self, packet, src):
+		# Convert received packets into binary data
 		self.message['raw'] = ConstBitStream(bytearray(packet))
 		self.read_header()
 		return self.message
