@@ -14,8 +14,19 @@ GTP_G_PDU = 255
 class GTPv1:
 	def __init__(self):
 
-		self.packet = None
 		self.message = {}
+		# message:
+		#    -------------
+		#    H E A D E R
+		#    -------------
+		#    P A Y L O A D
+		#    -------------
+		#    RAW DATA
+		#    -------------
+		self.message['header'] = {}
+		self.message['payload'] = {}
+		self.message['raw'] = {}
+
 		# TS 29.281 4.4.2
 		self.port_number = 2152
 		self.header_minimum_length = 8 # bytes
@@ -41,61 +52,67 @@ class GTPv1:
 							255: 'G-PDU'		
 						}
 
-	def echo_request(self):
+	def echo_request_handler(self):
 		pass
 
-	def echo_response(self):
+	def echo_response_handler(self, dest_port):
+		udp_src_port = self.port_number
 		pass
 
-	def error_indication(self):
-		pass
-	def end_marker(self):
-		pass
-	def g_pdu(self):
-		pass
-	def supported_ext_hdr_notf(self):
-		pass
+	def error_indication_handler(self):
+		dest_port = self.port_number
+		
+	def end_marker_handler(self):
+		dest_port = self.port_number
 
-	def handle_message(self, packet):
-		self.packet = ConstBitStream(packet)
-		self.read_header()
-		msg_type = self.message['MT']
+	def g_pdu_handler(self):
+		dest_port = self.port_number
+	def supported_ext_hdr_notf_handler(self):
+		dest_port = self.port_number
+
+	def handle_request(self, data):
+		msg_type = data['header']['MT']
 		if msg_type == GTP_ECHO_REQUEST:
-			self.echo_request()
+			return self.echo_request_handler()
 		elif msg_type == GTP_ECHO_RESPONSE:
-			self.echo_response()
+			return self.echo_response_handler()
 		elif msg_type == GTP_G_PDU:
-			self.g_pdu()
+			return self.g_pdu_handler()
 		elif msg_type == GTP_END_MARKER:
-			self.end_marker()
+			return self.end_marker_handler()
 		elif msg_type == GTP_ERROR_INDICATION:
-			self.error_indication()
+			return self.error_indication_handler()
 		elif msg_type == GTP_SUPPORTED_EXTENSION_HEADERS_NOTIFICIATION:
-			self.supported_ext_hdr_notf()
+			return self.supported_ext_hdr_notf_handler()
 		else:
 			return "unknown message type"
+
+
+	def get_message(self, packet, src):
+		self.message['raw'] = ConstBitStream(bytearray(packet))
+		self.read_header()
 		return self.message
 
 	def read_header(self):
 		# Always present
-		self.message['Version'] = self.packet.read('uint:' + str(self.header_bits['Version']))
-		self.message['PT'] = self.packet.read('uint:' + str(self.header_bits['PT']))
-		self.message['SpareBit'] = self.packet.read('uint:' + str(self.header_bits['SpareBit']))
-		self.message['E'] = self.packet.read('uint:' + str(self.header_bits['E']))
-		self.message['S'] = self.packet.read('uint:' + str(self.header_bits['S']))
-		self.message['PN'] = self.packet.read('uint:' + str(self.header_bits['PN']))
-		self.message['MT'] = self.packet.read('uint:' + str(self.header_bits['MessageType']))
-		self.message['Length'] = self.packet.read('uint:' + str(self.header_bits['Length']))
-		self.message['TEID'] = '0x'+self.packet.read('hex:' + str(self.header_bits['TEID']))
+		self.message['header']['Version'] = self.message['raw'].read('uint:' + str(self.header_bits['Version']))
+		self.message['header']['PT'] = self.message['raw'].read('uint:' + str(self.header_bits['PT']))
+		self.message['header']['SpareBit'] = self.message['raw'].read('uint:' + str(self.header_bits['SpareBit']))
+		self.message['header']['E'] = self.message['raw'].read('uint:' + str(self.header_bits['E']))
+		self.message['header']['S'] = self.message['raw'].read('uint:' + str(self.header_bits['S']))
+		self.message['header']['PN'] = self.message['raw'].read('uint:' + str(self.header_bits['PN']))
+		self.message['header']['MT'] = self.message['raw'].read('uint:' + str(self.header_bits['MessageType']))
+		self.message['header']['Length'] = self.message['raw'].read('uint:' + str(self.header_bits['Length']))
+		self.message['header']['TEID'] = '0x'+self.message['raw'].read('hex:' + str(self.header_bits['TEID']))
 
 		# Optional
-		if self.message['S'] == 1:
-			self.message['SN'] = '0x'+self.packet.read('hex:' + str(self.header_bits['SequenceNumber']))
+		if self.message['header']['S'] == 1:
+			self.message['payload']['SN'] = '0x'+self.message['raw'].read('hex:' + str(self.header_bits['SequenceNumber']))
 		# Next Extension Header present and should be interpreted
-		elif self.message['E'] == 1:
-			self.message['NEHT'] = self.packet.read('uint:' + str(self.header_bits['NextExtensionHeaderType']))
-		elif self.message['PN'] == 1:
-			self.message['N-PDU'] = self.packet.read('uint:' + str(self.header_bits['NPDUNumber']))
+		elif self.message['header']['E'] == 1:
+			self.message['payload']['NEHT'] = self.message['raw'].read('uint:' + str(self.header_bits['NextExtensionHeaderType']))
+		elif self.message['header']['PN'] == 1:
+			self.message['payload']['N-PDU'] = self.message['raw'].read('uint:' + str(self.header_bits['NPDUNumber']))
 
 		#return self.message
 		
@@ -104,14 +121,14 @@ class GTPv1:
 		print "GTP Header"
 		print "Version: {0}\n Flags: \n\tProtocol Type: {1}\n\tExtension Type: {2}\n\tSequence Number: {3}\n\tN-PDU Number: {4} \n" \
 		"Message Type: {5} ({6}) \n Message Length: {7} \n TEID: {8} \n" \
-		.format(r['Version'], r['PT'], r['E'], r['S'], r['PN'], r['MT'], self.message_type[r['MT']], r['Length'], r['TEID'])
+		.format(r['header']['Version'], r['header']['PT'], r['header']['E'], r['header']['S'], r['header']['PN'], r['header']['MT'], self.message_type[r['header']['MT']], r['header']['Length'], r['header']['TEID'])
 
-		if r['S'] == 1:
-			print "Sequence Number: {0} \n".format(r['SN'])
-		elif r['E'] == 1:
-			print "Next Extension Header Type: {0} \n".format(r['NEHT'])
-		elif r['PN'] == 1:
-			print "N-PDU Number: {0} \n".format(r['N-PDU'])
+		if r['header']['S'] == 1:
+			print "Sequence Number: {0} \n".format(r['payload']['SN'])
+		elif r['header']['E'] == 1:
+			print "Next Extension Header Type: {0} \n".format(r['payload']['NEHT'])
+		elif r['header']['PN'] == 1:
+			print "N-PDU Number: {0} \n".format(r['payload']['N-PDU'])
 
 
 		

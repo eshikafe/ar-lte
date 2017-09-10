@@ -29,10 +29,14 @@ class S1UserPlaneMessageHandler(SocketServer.BaseRequestHandler):
 	"""
 	def handle(self):
 		data = self.request[0]
+		sock = self.request[1]
 		if data:
-			msg = s1_u.handle_message(data)
-			logger.info("[GTPv1-U] SGW IP: %s:%s, Message Type: %s, teid: %s", self.client_address[0], self.client_address[1], s1_u.message_type[msg['MT']], msg['TEID'])
-
+			msg = s1_u.get_message(data, self.client_address)
+			logger.info("Src: %s, Dest: %s, Received message: %s, teid: %s", self.client_address, (s1u_host, s1u_port), s1_u.message_type[msg['header']['MT']], msg['header']['TEID'])
+			print msg
+			#response = s1_u.handle_request(msg)
+			#socket.sendto(response['raw'], self.client_address)
+			#logger.info("Src: %s, Dest: %s, Sent message: %s, teid: %s", (s1u_host, s1u_port), self.client_address, s1_u.message_type[response['header']['MT']], response['header']['TEID'])
 
 
 s1u = SocketServer.UDPServer((s1u_host, s1u_port), S1UserPlaneMessageHandler)
