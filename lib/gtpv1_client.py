@@ -6,7 +6,7 @@ import socket
 
 gtp_peer = GTPv1()
 
-HOST = '148.135.48.11' #socket.gethostbyname(socket.gethostname())
+HOST = socket.gethostbyname(socket.gethostname())
 PORT = gtp_peer.port_number
 
 s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
