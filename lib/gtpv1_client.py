@@ -12,14 +12,16 @@ PORT = gtp_peer.port_number
 s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 s.connect((HOST, PORT))
 
+# Test 1: Send EchoRequest Message
 # Send raw binary over the UDP socket
 data = bytearray.fromhex('320100040000000000000000')
-s.sendto(raw_data, (HOST, PORT))
+s.sendto(data, (HOST, PORT))
 
-#received = s.recv(1024)
+# Should receive an EchoResponse + Recovery IE: 0
+received = s.recv(1024)
 
 print "Sent:     {}".format(data)
-#print "Received: {}".format(received)
+print "Received: {}".format(received)
 
 s.close()
 

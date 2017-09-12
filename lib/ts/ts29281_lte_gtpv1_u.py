@@ -2,7 +2,7 @@
 # Reference: 3GPP TS 29.281, 3GPP TS 29.060
 # Copyright 2017 Aigbe Research
 
-from bitstring import ConstBitStream
+from bitstring import ConstBitStream, pack
 
 GTP_ECHO_REQUEST = 1
 GTP_ECHO_RESPONSE = 2
@@ -15,14 +15,14 @@ class GTPv1:
 	def __init__(self):
 
 		self.message = {}
-		# message:
-		#    -------------
-		#    H E A D E R
-		#    -------------
-		#    P A Y L O A D
-		#    -------------
-		#    RAW DATA
-		#    -------------
+		# message format:
+		#    -----------------
+		#      H E A D E R
+		#    -----------------
+		#      P A Y L O A D
+		#    ------------------
+		#      RAW DATA in hex
+		#    ------------------
 		self.message['header'] = {}
 		self.message['payload'] = {}
 		self.message['raw'] = {}
@@ -42,7 +42,7 @@ class GTPv1:
 							'NextExtensionHeaderType': 8  # Optional
 				   		}
 
-		# TS 29.281 6
+		# TS 29.281 6 GTPv1-U messages
 		self.message_type = {
 							1: 'Echo Request',
 							2: 'Echo Response',
@@ -52,12 +52,120 @@ class GTPv1:
 							255: 'G-PDU'		
 						}
 
-	def echo_request_handler(self):
-		pass
+	# Inputs:
+	#  ver: GTP version 1
+	#  pt: protocol type
+	#  spare: spare bit = 0
+	#  e: extension header flag
+	#  s: sequence number flag
+	#  pn: n-pdu number flag
+	#  
+	#  Output: BitStream
+	#  
+	def set_gtp_octet1(self, ver=1, pt=1, spare=0, e=0, s=1, pn=0):
+		return pack('uint:{0},uint:{1},uint:{2},uint:{3},uint:{4},uint:{5}'.format(self.header_bits['Version'], \
+			self.header_bits['PT'], self.header_bits['SpareBit'], self.header_bits['E'], self.header_bits['S'],\
+			self.header_bits['PN'] \
+			), ver, pt, spare, e, s, pn)
 
+
+	# Input:
+	#  mt: Message Type - 1 octet
+	# Output: 
+	#  BitStream
+	def set_gtp_message_type_octet(self, mt):
+		return pack('uint:{0}'.format(self.header_bits['MessageType']), mt)
+
+	# Input:
+	#  teid: Tunnel Endpoint Identifier (hex value) [4 octets (32 bits)]
+	# Output:
+	#  BitStream
+	def set_gtp_teid_octet(self, teid):
+		return pack('hex:{0}'.format(self.header_bits['TEID']), teid)
+
+	# Input:
+	#  seq_num: Sequence Number (hex value) - 2 octets
+	# Output: 
+	#  BitStream
+	def set_gtp_seq_num_octet(self, seq_num):
+		return pack('hex:{0}'.format(self.header_bits['SequenceNumber']), seq_num)
+
+	# Input:
+	#  msg_length: Message Length - 2 octets
+	# Output: 
+	#  BitStream
+	def set_gtp_message_length(self, msg_length):
+		return pack('uint:{0}'.format(self.header_bits['Length']), msg_length)
+
+	# TS 29.281 7.2 Path Management Messages
+	 
+	# TS 29.281 7.2.1 Echo Request 
+	def echo_request_handler(self, data):
+		gtp_response = {}
+		gtp_response['header'] = {}
+		gtp_response['payload'] = {}
+		gtp_response['raw'] = {}
+
+		gtp_ver = data['header']['Version']
+		gtp_proto_type = data['header']['PT']
+
+		# Indicates the presence of a meaningful value of the Next
+		# Extension Header field. If 1 then interprete the NEH field
+		gtp_ext_hdr_flag = data['header']['E']
+
+		# Echo Request, Echo Response: S = 1
+		gtp_seq_num_flag = data['header']['S']
+		gtp_npdu_num_flag = data['header']['PN']
+		octet1 = self.set_gtp_octet1(gtp_ver, gtp_proto_type, 0, gtp_ext_hdr_flag, gtp_seq_num_flag, gtp_npdu_num_flag)
+
+
+		# TS 29.281 7.2.2 Echo Response
+		# The message shall be sent as a response to a received Echo Request. 
+		gtp_msg_type = GTP_ECHO_RESPONSE
+		octet2_msg_type = self.set_gtp_message_type_octet(gtp_msg_type)
+
+		gtp_teid = data['header']['TEID']
+		octet4_teid = self.set_gtp_teid_octet(gtp_teid)
+
+		gtp_seq_num = data['payload']['SN']
+		octet5_seq_num = self.set_gtp_seq_num_octet(gtp_seq_num)
+
+		# Recovery IE
+		# The Restart Counter value in the Recovery information element shall not be used, i.e. it shall be set to zero by the
+		# sender and shall be ignored by the receiver. The Recovery information element is mandatory due to backwards
+		# compatibility reasons. 
+		recovery_ie = pack('uint:8', 14)
+		restart_counter_value = pack('uint:8', 0)
+		octet6_ie = recovery_ie + restart_counter_value
+
+		# Message Length in bytes
+		gtp_msg_len = len(octet5_seq_num + recovery_ie + restart_counter_value)/8
+		octet3_msg_len = self.set_gtp_message_length(gtp_msg_len)
+
+		# Prepare the response
+		gtp_response['header']['Version'] = gtp_ver
+		gtp_response['header']['PT'] = gtp_proto_type
+		gtp_response['header']['E'] = gtp_ext_hdr_flag
+		gtp_response['header']['S'] = gtp_seq_num_flag
+		gtp_response['header']['PN'] = gtp_npdu_num_flag
+		gtp_response['header']['MT'] = gtp_msg_type
+		gtp_response['header']['Length'] = gtp_msg_len
+		gtp_response['header']['TEID'] = gtp_teid
+		gtp_response['payload']['SN'] = gtp_seq_num
+		octets = octet1 + octet2_msg_type + octet3_msg_len + octet4_teid + octet5_seq_num + octet6_ie
+		gtp_response['raw'] = bytearray(octets._getbytes())
+
+		return gtp_response
+
+
+	# 7.2.2 Echo Response 
 	def echo_response_handler(self, dest_port):
 		udp_src_port = self.port_number
 		pass
+
+	def supported_ext_hdr_notf_handler(self):
+		dest_port = self.port_number
+
 
 	def error_indication_handler(self):
 		dest_port = self.port_number
@@ -67,13 +175,12 @@ class GTPv1:
 
 	def g_pdu_handler(self):
 		dest_port = self.port_number
-	def supported_ext_hdr_notf_handler(self):
-		dest_port = self.port_number
+	
 
 	def handle_request(self, data):
 		msg_type = data['header']['MT']
 		if msg_type == GTP_ECHO_REQUEST:
-			return self.echo_request_handler()
+			return self.echo_request_handler(data)
 		elif msg_type == GTP_ECHO_RESPONSE:
 			return self.echo_response_handler()
 		elif msg_type == GTP_G_PDU:
@@ -88,8 +195,12 @@ class GTPv1:
 			return "unknown message type"
 
 
+	# Inputs:
+	# 	packet: bytearray.fromhex(...)
+	# 	src: (ip_addr, port)
 	def get_message(self, packet, src):
 		# Convert received packets into binary data
+		# from bytearray.fromhex
 		self.message['raw'] = ConstBitStream(bytearray(packet))
 		self.read_header()
 		return self.message
@@ -104,11 +215,11 @@ class GTPv1:
 		self.message['header']['PN'] = self.message['raw'].read('uint:' + str(self.header_bits['PN']))
 		self.message['header']['MT'] = self.message['raw'].read('uint:' + str(self.header_bits['MessageType']))
 		self.message['header']['Length'] = self.message['raw'].read('uint:' + str(self.header_bits['Length']))
-		self.message['header']['TEID'] = '0x'+self.message['raw'].read('hex:' + str(self.header_bits['TEID']))
+		self.message['header']['TEID'] = self.message['raw'].read('hex:' + str(self.header_bits['TEID']))
 
 		# Optional
 		if self.message['header']['S'] == 1:
-			self.message['payload']['SN'] = '0x'+self.message['raw'].read('hex:' + str(self.header_bits['SequenceNumber']))
+			self.message['payload']['SN'] = self.message['raw'].read('hex:' + str(self.header_bits['SequenceNumber']))
 		# Next Extension Header present and should be interpreted
 		elif self.message['header']['E'] == 1:
 			self.message['payload']['NEHT'] = self.message['raw'].read('uint:' + str(self.header_bits['NextExtensionHeaderType']))
