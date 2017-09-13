@@ -20,7 +20,8 @@ s1u_host = socket.gethostbyname(socket.gethostname())
 s1u_port = s1_u.port_number
 
 # S1 Control Plane
-
+class S1ControlPlaneMessageHandler:
+	
 
 # Handler for S1-U
 class S1UserPlaneMessageHandler(SocketServer.BaseRequestHandler):

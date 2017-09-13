@@ -203,6 +203,7 @@ class GTPv1:
 		# from bytearray.fromhex
 		self.message['raw'] = ConstBitStream(bytearray(packet))
 		self.read_header()
+
 		return self.message
 
 	def read_header(self):
