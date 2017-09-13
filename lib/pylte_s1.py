@@ -21,7 +21,7 @@ s1u_port = s1_u.port_number
 
 # S1 Control Plane
 class S1ControlPlaneMessageHandler:
-	
+	pass
 
 # Handler for S1-U
 class S1UserPlaneMessageHandler(SocketServer.BaseRequestHandler):
