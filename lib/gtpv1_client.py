@@ -9,7 +9,7 @@ gtp_peer = GTPv1()
 HOST = socket.gethostbyname(socket.gethostname())
 PORT = gtp_peer.port_number
 
-s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM) # UDP Transport
 s.connect((HOST, PORT))
 
 # Test 1: Send EchoRequest Message
