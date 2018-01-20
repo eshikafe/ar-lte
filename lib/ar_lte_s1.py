@@ -1,4 +1,4 @@
-# pylte_s1.py
+# ar_lte_s1.py
 #
 # 3GPP LTE S1 implementation in Python 
 # Copyright (c) 2017 Aigbe Research
@@ -12,7 +12,7 @@ import socket
 
 log_format = '%(asctime)-15s [%(levelname)s] [%(name)s] %(message)s'
 logging.basicConfig(format=log_format, level=logging.INFO)
-logger = logging.getLogger('pylte_s1')
+logger = logging.getLogger('ar_lte_s1')
 
 # S1 User Plane
 s1_u = GTPv1()
