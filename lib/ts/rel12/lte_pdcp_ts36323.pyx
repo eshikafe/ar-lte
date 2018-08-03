@@ -1,4 +1,4 @@
-# ts36323_lte_pdcp.pyx
+# lte_pdcp_ts36323.pyx
 # 
 # 3GPP LTE Packet Data Convergence Protocol in Python
 # TS 36.323, 3GPP Release 12.2.0
@@ -6,9 +6,7 @@
 # Copyright (c) 2016 Aigbe Research
 #
 
-from lib.rfc import rfc3095_rohc as rohc
-
-release = (12,2,0)
+from lib.rfc import rohc_rfc3095 as rohc
 
 
 # 7.3 Constants

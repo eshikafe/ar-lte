@@ -1,4 +1,5 @@
-# ts29281_lte_gtpv1_u.py
+# lte_gtpv1_u_ts29281.py
+# 
 # Reference: 3GPP TS 29.281, 3GPP TS 29.060
 # Copyright 2017 Aigbe Research
 
@@ -15,6 +16,7 @@ class GTPv1:
 	def __init__(self):
 
 		self.message = {}
+
 		# message format:
 		#    -----------------
 		#      H E A D E R
@@ -23,6 +25,7 @@ class GTPv1:
 		#    ------------------
 		#      RAW DATA in hex
 		#    ------------------
+		
 		self.message['header'] = {}
 		self.message['payload'] = {}
 		self.message['raw'] = {}

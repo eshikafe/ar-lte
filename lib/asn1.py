@@ -1,4 +1,4 @@
-# pylte_asn1.py
+# asn1.py
 #
 # Copyright 2017 Aigbe Research
 

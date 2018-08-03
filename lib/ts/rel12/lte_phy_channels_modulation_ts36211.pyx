@@ -1,4 +1,4 @@
-# ts36211_lte_phy_channels_modulation.pyx
+# lte_phy_channels_modulation_ts36211.pyx
 # 
 # TS 36.211: Physical channels and modulation 
 #    The scope of this specification is to establish the characteristics of the Layer-1 physical channels, 
@@ -33,7 +33,7 @@
 
 from libc.math cimport *
 from libc.stdint cimport *
-from ts36101_ue_radio_tx_reception cimport *
+from ue_radio_tx_reception_ts36101 cimport *
 
 
 

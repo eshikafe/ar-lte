@@ -1,7 +1,9 @@
+# ar_gtp_client.py
 # GTPv1U test client
+# 
+# (c) Copyright 2018 Aigbe Research
 
-from ts.ts29281_lte_gtpv1_u import *
-
+from ts.ts29281_lte_gtpv1_u import * # 3GPP TS 29.281 LTE GTPv1 User Plane
 import socket
 
 gtp_peer = GTPv1()

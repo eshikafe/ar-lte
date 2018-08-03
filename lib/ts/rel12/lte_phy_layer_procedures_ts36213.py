@@ -1,4 +1,4 @@
-# ts36213.py
+# lte_phy_layer_procedures_ts36213.py
 # 
 # TS 36.213: Physical layer procedures
 # The scope of this specification is to establish the characteristics of the physical layer procedures, and to specify:

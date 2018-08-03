@@ -3,8 +3,8 @@
 # 3GPP LTE S1 implementation in Python 
 # Copyright (c) 2017 Aigbe Research
 
-from ts.ts29281_lte_gtpv1_u import *
-from ts.ts36413_s1ap import *
+from ts.ts29281_lte_gtpv1_u import * # 3GPP TS 29.281 LTE GTPv1 User Plane
+from ts.ts36413_s1ap import *        # 3GPP TS 36.413 S1 Application Part
 
 import SocketServer
 import logging
