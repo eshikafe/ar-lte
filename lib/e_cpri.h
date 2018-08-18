@@ -41,7 +41,6 @@ struct e_cpri_header {
 /* 3.2.3. eCPRI Message Format */
 
 struct e_cpri_msg {
-	uint8_t msg_type;
 	struct e_cpri_header hdr;
 	uint8_t payload[MAX_PAYLOAD_SIZE];
 };
