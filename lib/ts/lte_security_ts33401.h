@@ -1,9 +1,10 @@
-/* lte_security_ts33401.h
+/* 
+  Copyright (c) 2017 Aigbe Research
+lte_security_ts33401.h
 
  3GPP System Architecture Evolution (SAE); Security architecture
  Compliance: 3GPP TS 33.401 version 12.13.0 Release 12
  
- Copyright (c) 2017 Aigbe Research
 */
 
 #include <stdint.h>
