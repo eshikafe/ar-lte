@@ -1,16 +1,13 @@
-# lte_gtpv1_u_ts29281.py
-# 
-# Reference: 3GPP TS 29.281, 3GPP TS 29.060
-# Copyright 2017 Aigbe Research
+/*
+	Copyright (c) 2018 Aigbe Research
 
-from bitstring import ConstBitStream, pack
+  lte_gtpv1_u_ts29281.py
+ 
+ References: 
+ 	3GPP TS 29.281 - General Packet Radio System (GPRS) Tunnelling Protocol User Plane (GTPv1-U) 
+*/
 
-GTP_ECHO_REQUEST = 1
-GTP_ECHO_RESPONSE = 2
-GTP_ERROR_INDICATION = 26
-GTP_SUPPORTED_EXTENSION_HEADERS_NOTIFICIATION = 31
-GTP_END_MARKER = 254
-GTP_G_PDU = 255
+#include "lte_gtpv1_ts29281.h"
 
 class GTPv1:
 	def __init__(self):
@@ -65,13 +62,16 @@ class GTPv1:
 	#  
 	#  Output: BitStream
 	#  
-	def set_gtp_octet1(self, ver=1, pt=1, spare=0, e=0, s=1, pn=0):
+void set_gtp_octet1(struct gtpv1_u *packet, uint8_t flag)
+{
+	packet -> gtp
+ver=1, pt=1, spare=0, e=0, s=1, pn=0):
+
 		return pack('uint:{0},uint:{1},uint:{2},uint:{3},uint:{4},uint:{5}'.format(self.header_bits['Version'], \
 			self.header_bits['PT'], self.header_bits['SpareBit'], self.header_bits['E'], self.header_bits['S'],\
 			self.header_bits['PN'] \
 			), ver, pt, spare, e, s, pn)
-
-
+}
 	# Input:
 	#  mt: Message Type - 1 octet
 	# Output: 
