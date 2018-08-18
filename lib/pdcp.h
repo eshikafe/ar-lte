@@ -8,7 +8,7 @@ pdcp.h
 
 */
 
-#include "ts\lte_pdcp_ts36323.h"
+#include "ts/lte_pdcp_ts36323.h"
 
 
 /* 4.2.2 PDCP entities */
@@ -18,7 +18,7 @@ struct pdcp_entity
 };
 
 /* 4.2.1 PDCP structure  
-	The PDCP sublayer is configured by upper layers (RRC)
+	The PDCP sublayer is configured by upper layers (RRC, User Plane)
 */
 
 struct rrc_control_parameters
