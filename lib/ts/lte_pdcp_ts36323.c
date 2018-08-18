@@ -41,7 +41,7 @@
         cdef uint self.tReordering = timer.tReordering
 
 }
-// Transmitting (i.e Downlink)
+// Transmitting (DL)
   
 void sequence_numbering(self) {
 
@@ -79,26 +79,25 @@ void routing(struct pdcp_pdu *pp)
         // TODO
 }
 
-    # -----------------------
-    # Receiving (i.e Uplink)
-    # -----------------------
-    def remove_pdcp_header(self, pdcp_data):
+// Receiving (UL)
+    
+void remove_pdcp_header(self, pdcp_data):
         # TODO
         
-    def deciphering(self, pdcp_data):
+void deciphering(self, pdcp_data):
         # TODO
 
-    def integrity_verification(self, pdcp_data):
+void integrity_verification(self, pdcp_data):
         # Inputs: COUNT and direction (TS 36.323 5.7)
         # Control plane only
         # TODO
 
-    def reordering(self, pdcp_data):
+void reordering(self, pdcp_data):
         # User plane only
         # TODO
 
     # RoHC decompressor
-    def header_decompression(self, pdcp_data):
+void header_decompression(self, pdcp_data):
         # User plane only
         rohc.decompressor(pdcp_data)
 
