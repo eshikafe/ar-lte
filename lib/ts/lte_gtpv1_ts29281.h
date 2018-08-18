@@ -1,7 +1,7 @@
 /*
 	Copyright (c) 2018 Aigbe Research
 
-  lte_gtpv1_u_ts29281.py
+  lte_gtpv1_u_ts29281.h
  
  References: 
  	3GPP TS 29.281 - General Packet Radio System (GPRS) Tunnelling Protocol User Plane (GTPv1-U)
