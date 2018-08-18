@@ -27,30 +27,8 @@ class GTPv1:
 		self.message['payload'] = {}
 		self.message['raw'] = {}
 
-		# TS 29.281 4.4.2
-		self.port_number = 2152
-		self.header_minimum_length = 8 # bytes
 
-		# TS 29.281 Section 5 GTP-U Header
-		self.header_bits = {'Version': 3, 'PT': 1, 'SpareBit': 1, 'E': 1, 'S': 1, 'PN': 1,
-							'MessageType': 8,
-							'Length': 16, # length of payload in bytes
-							'TEID': 32,
-							 # Payload
-							'SequenceNumber': 16, # Optional field
-							'NPDUNumber': 8,     # Optional
-							'NextExtensionHeaderType': 8  # Optional
-				   		}
-
-		# TS 29.281 6 GTPv1-U messages
-		self.message_type = {
-							1: 'Echo Request',
-							2: 'Echo Response',
-							26: 'Error indication',
-							31: 'Supported Extension Headers Notification',
-							254: 'End Marker',
-							255: 'G-PDU'		
-						}
+	
 
 	# Inputs:
 	#  ver: GTP version 1
