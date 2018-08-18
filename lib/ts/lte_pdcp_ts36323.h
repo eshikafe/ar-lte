@@ -1,7 +1,11 @@
 /* lte_pdcp_ts36323.h
  
- 3GPP LTE Packet Data Convergence Protocol
- TS 36.323, 3GPP Release 12.2.0
+Reference Document:
+ LTE;
+ Evolved Universal Terrestrial Radio Access (E-UTRA);
+ Packet Data Convergence Protocol (PDCP) specification
+ 3GPP TS 36.323, 3GPP Release 12.2.0
+ https://www.etsi.org/deliver/etsi_ts/136300_136399/136323/12.02.00_60/ts_136323v120200p.pdf
 
  Copyright (c) 2016 Aigbe Research
 
@@ -129,8 +133,8 @@ cdef union Timer:
     unsigned int tReordering
     
 struct pdcp_pdu {
-    int plane,           /* user plane or control plane */
-    int type,            /* control or data pdu */
+    int plane;           /* user plane or control plane */
+    int type;            /* control or data pdu */
     int direction,       /* Transmitting or receiving */
     char *pdcp_sdu,      /* 6.3.3 Data */
     int logical_channel, /* SRBs, DRBs, and SLRBs mapped on DCCH, DTCH, and STCH */
@@ -148,3 +152,44 @@ struct pdcp_pdu {
     }
         
 };
+
+struct pdcp_entity {
+    def __init__(self, pdcp_pdu data, Timer timer):
+        # Separate the SDU data from the PDU
+        self.pdcp_sdu = data.pdcp_sdu
+        data.pdcp_sdu = NULL
+        self.pdcp_pdu = data
+
+        # 7.1 Variables
+        # PDCP SN of the next PDCP SDU for a given PDCP entity
+        cdef unsigned int self.next_pdcp_tx_sn = 0
+
+        # HFN value for the generation of the COUNT value
+        #  used for PDCP PDUs for a given PDCP entity
+        cdef unsigned int self.tx_hfn = 0
+
+        # The next expected PDCP SN by the receiver for a given PDCP entity
+        cdef unsigned int self.next_pdcp_rx_sfn = 0
+
+        cdef unsigned int self.rx_hfn = 0
+
+        # Last_Submitted_PDCP_RX_SN indicates the SN of the last PDCP SDU delivered to the upper layers.
+        cdef unsigned int self.last_submitted_pdcp_rx_sfn = MAXIMUM_PDCP_SN[self.pdcp_pdu.sfn_type]
+
+        # This variable is used only when the reordering function is used.
+        # This variable holds the value of the COUNT following
+        #  the COUNT value associated with the PDCP PDU which triggered t-Reordering
+        cdef uint self.reordering_pdcp_rx_count
+
+        # 7.2 Timers
+        # The duration of the timer is configured by upper layers.
+        # In the transmitter, a new timer is started upon reception of an SDU from upper layer. 
+        cdef uint self.discardTimer = timer.discardTimer
+
+        # This timer is used to detect loss of PDCP PDUs as specified
+        # in the subclause 5.1.2.1.4. If t-Reordering is running,
+        # t-Reordering shall not be started additionally, i.e. only one tReordering
+        # per PDCP entity is running at a given time. 
+        cdef uint self.tReordering = timer.tReordering
+
+}

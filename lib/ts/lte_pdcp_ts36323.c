@@ -1,11 +1,7 @@
 #include "lte_pdcp_ts36323.h"
 
-uint8_t max_pdcp_sn[5] = { 
-	MAX_PDCP_SN_16, MAX_PDCP_SN_15,
-    MAX_PDCP_SN_12, MAX_PDCP_SN_7, MAX_PDCP_SN_5
- };
 
- cdef class PDCPEntity:
+ struct pdcp_Entity {
     def __init__(self, pdcp_pdu data, Timer timer):
         # Separate the SDU data from the PDU
         self.pdcp_sdu = data.pdcp_sdu
@@ -44,30 +40,44 @@ uint8_t max_pdcp_sn[5] = {
         # per PDCP entity is running at a given time. 
         cdef uint self.tReordering = timer.tReordering
 
-    # -----------------------------    
-    # Transmitting (i.e Downlink)
-    # ----------------------------
-    cpdef sequence_numbering(self):
-        #TODO
+}
+// Transmitting (i.e Downlink)
+  
+void sequence_numbering(self) {
 
-    # RoHC compressor
-    cpdef header_compression(self):
-        # User plane only
-        if self.pdcp_pdu.plane == PDCP_USER_PLANE and self.pdcp_pdu.plane.direction == PDCP_TX:
-            if self.pdcp_pdu.pdps.sdu_type == SDU_TYPE_IP:
-                rohc.compressor(self.pdcp_sdu)
+}
 
-    def integrity_protection(self, pd):
-        # Control plane only
-        
-    def ciphering(self, pdcp_data):
-        # TODO
 
-    def add_pdcp_header(self, pdcp_data):
-        # TODO
+/* RoHC compressor */
+void header_compression(struct pdcp_pdu *pp) {
+        /* User plane only */
+        if (pp->plane == PDCP_USER_PLANE) && (pp->plane.direction == PDCP_TX)
+        {
+            if (pp->pdps.sdu_type == SDU_TYPE_IP)
+                rohc_compressor(pp->pdcp_sdu);
+        }
+}
 
-    def routing(self, pdcp_data):
-        # TODO
+void integrity_protection(struct pdcp_pdu *pp) 
+{
+        /* Control plane only */
+
+}
+
+void ciphering(struct pdcp_pdu *pp)
+{
+        // TODO
+}
+
+void add_pdcp_header(struct pdcp_pdu *pp)
+{
+        // TODO
+}
+
+void routing(struct pdcp_pdu *pp)
+{
+        // TODO
+}
 
     # -----------------------
     # Receiving (i.e Uplink)

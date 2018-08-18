@@ -2,13 +2,14 @@
 	Copyright (c) 2018 Aigbe Research
 
   lte_gtpv1_u_ts29281.h
+
+  Use DPDK for the user plane packet processing
  
  References: 
  	3GPP TS 29.281 - General Packet Radio System (GPRS) Tunnelling Protocol User Plane (GTPv1-U)
  	3GPP TS 29.060 - GTP across the Gn and Gp interface 
 */
 
-//from bitstring import ConstBitStream, pack
 #include <stdint.h> 
 
 /* 6 GTPv1-U message */
@@ -25,16 +26,17 @@
 /* 5 GTP-U Header */
 
 struct header {
-	uint8_t flag,               /* Ver, pt, spare, E, S, PN */
-	uint8_t msg_type,   		/* Message Type */
-	uint16_t length,
-	uint32_t teid, 				/* Tunnel Endpoint Identifier */
-	uint16_t seq_num,   		/* Sequence Number [optional] */
-	uint8_t n_pdu_num,  		/* N-PDU Number [optional] */
-	uint8_t next_ext_hdr_type	/* Next Extension Header Type [optional] */
+	uint8_t flag;               /* Ver:3, pt:1, spare:1, E:1, S:1, PN:1 */
+	uint8_t msg_type;   		/* Message Type */
+	uint16_t length;            /* Length in octets of the payload */
+	uint32_t teid; 				/* Tunnel Endpoint Identifier */
+	uint16_t seq_num;   		/* Sequence Number [optional] */
+	uint8_t n_pdu_num;  		/* N-PDU Number [optional] */
+	uint8_t next_ext_hdr_type;	/* Next Extension Header Type [optional] */
 };
 
 struct gtpv1_u {
 	struct header hdr,
+
 
 }
