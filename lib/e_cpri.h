@@ -21,11 +21,18 @@
  
 */
 
+/*
+		The maximum supported payload size is 2^16 -1 but the actual size may 
+		be further limited by the maximum payload size of the underlying transport network.
+*/
+
+#define MAX_PAYLOAD_SIZE 65535
+
 /* 3.2.3.2. Common Header */
 
 struct e_cpri_header {
-	uint8_t rev_r_c; /* eCPRI protocol revision: 4, Reserved: 3 , C: 1 */
-	uint8_t msg_type;
+	uint8_t rev_r_c;  /* eCPRI protocol revision: 4, Reserved: 3 , C: 1 */
+	uint8_t msg_type;   /* 3.2.4. Message Types */
 	uint16_t payload_size; /* eCPRI Payload Size is the size in bytes of 
 	                          the payload part corresponding to the eCPRI message
 	                        */
@@ -36,7 +43,7 @@ struct e_cpri_header {
 struct e_cpri_msg {
 	uint8_t msg_type;
 	struct e_cpri_header hdr;
-	uint8_t payload[65535];
+	uint8_t payload[MAX_PAYLOAD_SIZE];
 };
 
 /* 3.2.4. Message Types */
