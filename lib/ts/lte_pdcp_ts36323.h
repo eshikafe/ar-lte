@@ -68,7 +68,7 @@ struct control_plane_pdcp_pdu {
 
 /* 6.2.3 User plane PDCP Data PDU with long PDCP SN (12 bits) */
 struct user_plane_pdcp_pdu_long_sn:
-    char dc        # 1 bit
+    uint8_t dc;  /* dc; 1, r: 3, pdcp sn: 4 */
     char r         # 3 bits - 0 # 6.3.6
     short pdcp_sn  # 12 bits - DRBs, if configured by upper layers (pdcp-SN-Size [3]) 
     char* data     # PDCP SDU
