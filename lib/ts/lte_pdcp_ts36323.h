@@ -158,3 +158,19 @@ struct pdcp_pdu {
         
 };
 
+/* 4.2.2 PDCP entities */
+struct pdcp_entity
+{
+
+};
+
+/* 4.2.1 PDCP structure  
+    The PDCP sublayer is configured by upper layers (RRC, User Plane)
+*/
+
+struct rrc_control_parameters
+{
+    int ul_data_path;
+    
+}
+
