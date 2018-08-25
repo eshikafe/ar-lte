@@ -1,8 +1,8 @@
 /*
-	Copyright (c) 2018 Aigbe Research
+ Copyright (c) 2018 Aigbe Research
 
-	hmac_sha256 uses the SHA256 hash function to 
-    compute a hash-based Message Authentication Code (HMAC).
+ hmac_sha256 uses the SHA256 hash function to 
+ compute a hash-based Message Authentication Code (HMAC).
 
 References:
     https://en.wikipedia.org/wiki/SHA-2
