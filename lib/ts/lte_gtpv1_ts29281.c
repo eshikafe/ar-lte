@@ -1,10 +1,11 @@
 /*
-	Copyright (c) 2018 Aigbe Research
+ Copyright (c) 2018 Aigbe Research
 
-  lte_gtpv1_u_ts29281.py
+ lte_gtpv1_u_ts29281.c
  
  References: 
  	3GPP TS 29.281 - General Packet Radio System (GPRS) Tunnelling Protocol User Plane (GTPv1-U) 
+
 */
 
 #include "lte_gtpv1_ts29281.h"
@@ -28,60 +29,42 @@ class GTPv1:
 		self.message['raw'] = {}
 
 
-	
-
-	# Inputs:
-	#  ver: GTP version 1
-	#  pt: protocol type
-	#  spare: spare bit = 0
-	#  e: extension header flag
-	#  s: sequence number flag
-	#  pn: n-pdu number flag
-	#  
-	#  Output: BitStream
-	#  
-void set_gtp_octet1(struct gtpv1_u *packet, uint8_t flag)
+void set_gtp_octet1(struct gtpv1_u_msg *packet, uint8_t flag)
 {
-	packet -> gtp
-ver=1, pt=1, spare=0, e=0, s=1, pn=0):
+	packet->hdr.flag = flag;  /* ver=001, pt=1, spare=0, e=0, s=1, pn=0 */
 
-		return pack('uint:{0},uint:{1},uint:{2},uint:{3},uint:{4},uint:{5}'.format(self.header_bits['Version'], \
-			self.header_bits['PT'], self.header_bits['SpareBit'], self.header_bits['E'], self.header_bits['S'],\
-			self.header_bits['PN'] \
-			), ver, pt, spare, e, s, pn)
 }
 	# Input:
 	#  mt: Message Type - 1 octet
 	# Output: 
 	#  BitStream
-	def set_gtp_message_type_octet(self, mt):
-		return pack('uint:{0}'.format(self.header_bits['MessageType']), mt)
+void set_gtp_message_type_octet(struct gtpv1_u_msg *packet, uint8_t mt)
+{
+	packet->hdr.msg_type = mt;
+}
 
-	# Input:
-	#  teid: Tunnel Endpoint Identifier (hex value) [4 octets (32 bits)]
-	# Output:
-	#  BitStream
-	def set_gtp_teid_octet(self, teid):
-		return pack('hex:{0}'.format(self.header_bits['TEID']), teid)
+void set_gtp_teid_octet(struct gtpv1_u_msg *packet, uint32_t teid)
+{
+	packet->hdr.teid = teid;
+}
 
-	# Input:
-	#  seq_num: Sequence Number (hex value) - 2 octets
-	# Output: 
-	#  BitStream
-	def set_gtp_seq_num_octet(self, seq_num):
-		return pack('hex:{0}'.format(self.header_bits['SequenceNumber']), seq_num)
+void set_gtp_seq_num_octet(struct gtpv1_u_msg *packet, uint16_t seq_num)
+{
+	packet->hdr.seq_num = seq_num;
+}
 
-	# Input:
-	#  msg_length: Message Length - 2 octets
-	# Output: 
-	#  BitStream
-	def set_gtp_message_length(self, msg_length):
-		return pack('uint:{0}'.format(self.header_bits['Length']), msg_length)
+	
+void set_gtp_message_length(struct gtpv1_u_msg *packet, uint16_t msg_length)
+{
+	packet->hdr.length = msg_length;
+}
 
-	# TS 29.281 7.2 Path Management Messages
+/* TS 29.281 7.2 Path Management Messages */
 	 
-	# TS 29.281 7.2.1 Echo Request 
-	def echo_request_handler(self, data):
+/* TS 29.281 7.2.1 Echo Request */
+
+void echo_request_handler(struct gtpv1_u_msg *packet, uint8_t *data)
+{
 		gtp_response = {}
 		gtp_response['header'] = {}
 		gtp_response['payload'] = {}
@@ -137,7 +120,7 @@ ver=1, pt=1, spare=0, e=0, s=1, pn=0):
 		gtp_response['raw'] = bytearray(octets._getbytes())
 
 		return gtp_response
-
+}
 
 	# 7.2.2 Echo Response 
 	def echo_response_handler(self, dest_port):
@@ -226,8 +209,4 @@ ver=1, pt=1, spare=0, e=0, s=1, pn=0):
 
 
 		
-		
-
-
-
-
+	
