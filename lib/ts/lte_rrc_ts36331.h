@@ -1,7 +1,7 @@
 /* 
 (c) 2018 Aigbe Research
 
-rrc_ts36331.h
+lte_rrc_ts36331.h
  
  3GPP TS 36.331, Evolved Universal Terrestrial Radio Access (E-UTRA); 
  Radio Resource Control (RRC) Protocol specification
@@ -84,5 +84,5 @@ struct RRCConnectionRequest {
 	RRCConnectionRequest_r8_IEs rrc_con_req_r8;
 };
 
-void encode_rrc_con_req(struct RRCConnectionRequest *msg, struct asn1_msg );
-void decode_rrc_con_req(struct RRCConnectionRequest *msg, struct asn1_msg);
+void encode_rrc_con_req(struct RRCConnectionRequest *in, struct asn1_uper *out  );
+void decode_rrc_con_req(struct RRCConnectionRequest *out, struct asn1_uper *in);
