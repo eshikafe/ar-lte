@@ -3,7 +3,7 @@
 %
 % Compliance: 
 %    3GPP TS 33.401 version 12.13.0 Release 12
-%    TS 33.220
+%    TS 33.220 V12.3.0 
 
 -module(lte_security_ts33401).
 
