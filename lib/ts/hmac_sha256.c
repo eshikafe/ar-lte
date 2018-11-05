@@ -85,7 +85,6 @@ Step 8 Append the result from step 6 to step 7:
 Step 9 Apply H to the result from step 8:
        H((K0 ⊕ opad )|| H((K0 ⊕ ipad) || text)).
 */
-   
 
 }
 
