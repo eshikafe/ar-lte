@@ -32,49 +32,22 @@
 
 % Use the sha256() hash function to compute a hmac code with the hmac() function
 hmac_sha256(Key, Data) ->
-	crypto:hmac(sha256, Key, Data).
+	crypto:hmac(sha256, Key, Data, 128).
 
-% RRC integrity key
-k_rrc_int(K_eNB, Algo_id) ->
+% key derivation function
+%   KRRCint, KRRCenc, KUPint, KUPenc
+kdf(KeNB, AlgoType, AlgoId) when size(KeNB) == 32 ->
 	FC = <<15:8>>, 
-	P0 = ?RRC_INT_ALG,     % algorithm type distinguisher
+	P0 = AlgoType,         % algorithm type distinguisher
 	L0 = <<1:16>>,         % length of algorithm type distinguisher (i.e 0x00 0x01)
-	P1= Algo_id,           % algorithm identity
+	P1= AlgoId,            % algorithm identity
 	L1 = <<1:16>>,         % length of algorithm identity (i.e. 0x00 0x01)
 
     % S = FC || P0 || L0 || P1 || L1 || P2 || L2 || P3 || L3 ||... || Pn || Ln */
     S = <<FC/binary, P0/binary, L0/binary, P1/binary, L1/binary>>, 
     hmac_sha256(K_eNB, S).
 
-% RRC encryption key
-k_rrc_enc(K_eNB, Algo_id) ->
-	FC = <<15:8>>, 
-	P0 = ?RRC_ENC_ALG,     
-	L0 = <<1:16>>,         
-	P1= Algo_id,           
-	L1 = <<1:16>>,         
-    S = <<FC/binary, P0/binary, L0/binary, P1/binary, L1/binary>>, 
-    hmac_sha256(K_eNB, S).
 
-% User plane encryption key
-k_up_enc(K_eNB, Algo_id) ->
-	FC = <<15:8>>, 
-	P0 = ?UP_ENC_ALG,
-	L0 = <<1:16>>,     
-	P1= Algo_id,       
-	L1 = <<1:16>>,     
-	S = <<FC/binary, P0/binary, L0/binary, P1/binary, L1/binary>>, 
-	hmac_sha256(K_eNB, S).
-
-% User plane integrity key
-k_up_int(K_eNB, Algo_id) ->
-	FC = <<15:8>>, 
-	P0 = ?UP_INT_ALG,
-	L0 = <<1:16>>,     
-	P1= Algo_id,       
-	L1 = <<1:16>>,     
-	S = <<FC/binary, P0/binary, L0/binary, P1/binary, L1/binary>>, 
-	hmac_sha256(K_eNB, S).
 
 % A.2 Kasm derivation function
 k_asme_df(CK, IK, MCC, MNC) ->
@@ -100,4 +73,5 @@ k_asme_df(CK, IK, MCC, MNC) ->
 	L1 = <<6:16>>,
 	S = <<FC/binary, P0/binary, L0/binary, P1/binary, L1/binary>>,
 	Key = <<CK/binary, IK/binary>>,
-	hmac_sha256(Key, S).
+	hmac_sha256(Key, S),
+	SN_id.
