@@ -9,3 +9,14 @@ Roadmap
 3. Deep learning with LTE signal processing
 4. eCPRI v1.1 with DPDK support
 5. Wireless-To-The-Antenna (WTTA)
+
+
+arlte_lib
+=========
+
+An OTP library
+
+Build
+-----
+
+    $ rebar3 compile
