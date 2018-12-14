@@ -2,7 +2,7 @@
 %
 %  3GPP TS 33.401 version 12.13.0 Release 12
 
--module(lte_security_ts33401_SUITE).
+-module(arlte_security_ts33401_SUITE).
 
 -compile(export_all).
 
@@ -22,16 +22,16 @@ end_per_suite(Config) ->
 
 eea2_128(_Config) ->
 	F = fun(#test_set{key = Key, count = Count, bearer = Bearer, length = Length, plaintext = Plaintext, ciphertext = Ciphertext}) ->
-				Ciphertext = lte_security_ts33401:eea2_128_encryption(Key, Count, Bearer, Direction, Length, Plaintext)
+				Ciphertext = lte_security_ts33401:eea2_128_encrypt(Key, Count, Bearer, Direction, Length, Plaintext)
 	end,
 	lists:foreach(F, [test_set(N) || N <- lists:seq(1, 2)]).
  
 
-% C.1.1 Test Set 1 
+% 3GPP TS 33.401 C.1.1 Test Set 1 
 
 test_set(1) ->
 	#test_set{
-    	key = <<211,197,213,146,50,127,177,28,64,53,198,104,10,248,198,209>>
+    	key = <<211,197,213,146,50,127,177,28,64,53,198,104,10,248,198,209>>,
     	count = <<57,138,89,180>>,
     	bearer = <<(16#15):5>>,
     	direction = 1,

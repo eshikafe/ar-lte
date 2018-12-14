@@ -1,26 +1,9 @@
 /* 
   Copyright (c) 2015 - 2017 Aigbe Research
 
-  lte_phy_ts36211.c
+  ar_lte_phy_ts36211.c
  
  TS 36.211: Physical channels and modulation 
-    The scope of this specification is to establish the characteristics of the Layer-1 physical channels, 
-    generation of physical layer signals and modulation, and to specify:
- 		- Definition of the uplink, downlink and sidelink physical channels;
-       - The structure of the physical channels, frame format, physical resource elements, etc.;
-	- Modulation mapping (BPSK, QPSK, etc);
-		- Physical shared channel in uplink, downlink and sidelink;
- 		- Reference signals in uplink, downlink and sidelink;
-		- Random access channel;
-		- Primary and secondary synchronization signals;
-		- Primary and secondary sidelink synchronization signals;
-		- OFDM signal generation in downlink;
-		- SC-FDMA signal generation in uplink and sidelink;
-		- Scrambling, modulation and up conversion;
-		- Uplink-downlink and sidelink timing relations;
-		- Layer mapping and precoding in downlink, uplink and sidelink. 
-		
-		Reference: 3GPP TS 36.201 version 12.2.0 Release 12, Section 5.3
 				
  Physical layer processing:
 	  scrambling
@@ -38,62 +21,74 @@
 #include <math.h>
 #include <stdint.h>
 #include "ue_radio_tx_reception_ts36101.h"
+#include "ar_lte_phy_scrambling.h"
+#include "ar_lte_phy_modulation.h"
+#include "ar_lte_phy_layer_mapping.h"
+#include "ar_lte_phy_precoding.h"
+#include "ar_lte_phy_re_mapping.h"
+#include "ar_lte_phy_ofdm_signal_gen.h"
 
 
 
-# Frame structure (4)
-cdef double Ts =  1/(15000*2048) # seconds (basic time unit)
-cdef double Tf = 307200 * Ts    # 10ms duration (radio frame duration)
+/* Frame structure (4) */
+double Ts =  1/(15000*2048);  /*seconds (basic time unit) */
+double Tf = 307200 * Ts;      /* 10ms duration (radio frame duration) */
 
 LTE_PHY_RADIO_FRAME_TYPE1 = "FDD"
 LTE_PHY_RADIO_FRAME_TYPE2 = "TDD"
 
-cdef enum:
-  LTE_PHY_FDD_HALF_DUPLEX
+enum {
+  LTE_PHY_FDD_HALF_DUPLEX,
   LTE_PHY_FDD_FULL_DUPLEX
+};
 
-# Frame structure type 1 (4.1)
-# 
-#   1 radio frame (Tf) = 20 slots = 10 subframes = 10ms
-#   1 slot (T_slot_fdd) = 0.5ms
-#   1 subframe = 2 slots = 1ms [2i and 2i+1, i = subframe]
-#   
-#   For FDD, DL transmission = 10 subframes, UL transmission = 10 subframes
-#   in each Tf interval
-cdef double T_slot = 15360 * Ts # 0.5ms (radio frame type1/type2 slot duration)
+/* Frame structure type 1 (4.1)
 
-# Uplink physical channels (5.1.1)
-# PUSCH
-# PUCCH
-# PRACH
-#
-# UL Physical channel:
-# resource_elements
-# sets of resource_elements
-# Transmitted signal/slot:
-#   resource grid:
-#     N_UL_RB*N_RB_SC
-#     num_uplink_symb (N_UL_symb)
-#     N_UL_RB:
-#       uplink tx bw configured in the cell
-# SC-FDMA symbols in a slot depends on
-# UL_CyclicPrefixLength Table 5.2.3.1
-# 
-#  Antenna port
-#  1 resource grid per ant_port
-#  num_ant_port
-#  ant_port used for tx of a phy channel
-#  
-#  
+   1 radio frame (Tf) = 20 slots = 10 subframes = 10ms
+   1 slot (T_slot_fdd) = 0.5ms
+   1 subframe = 2 slots = 1ms [2i and 2i+1, i = subframe]
+   
+   For FDD, DL transmission = 10 subframes, UL transmission = 10 subframes
+   in each Tf interval
+*/
+double T_slot = 15360 * Ts; /* 0.5ms (radio frame type1/type2 slot duration) */
 
+/* Uplink physical channels (5.1.1)
+    PUSCH
+    PUCCH
+    PRACH
+*/
 
-cdef int Nc = 1600
+/* UL Physical channel:
+    resource_elements
+    sets of resource_elements
+    Transmitted signal/slot:
+      resource grid:
+      N_UL_RB*N_RB_SC
+      num_uplink_symb (N_UL_symb)
+      N_UL_RB:
+        uplink tx bw configured in the cell
+ SC-FDMA symbols in a slot depends on
+ UL_CyclicPrefixLength Table 5.2.3.1
+ 
+  Antenna port
+  1 resource grid per ant_port
+  num_ant_port
+  ant_port used for tx of a phy channel
+*/ 
 
-cdef double _a = 1/sqrt(2)
-cdef double _b = 1/sqrt(10)
-cdef double _c = 1/sqrt(42)
+struct ul_phy_channel
+{
+  int resource_elements,
+}
 
-# BPSK - TS 36.211 V12.2.0, section 7.1.1, Table 7.1.1-1
+int Nc = 1600;
+
+double _a = 1/sqrt(2)
+double _b = 1/sqrt(10)
+double _c = 1/sqrt(42)
+
+/*BPSK - TS 36.211 V12.2.0, section 7.1.1, Table 7.1.1-1 */
 _bpsk = (complex(_a,_a), complex(-_a,-_a))
 
 # QPSK - TS 36.211 V12.2.0, section 7.1.2, Table 7.1.2-1
