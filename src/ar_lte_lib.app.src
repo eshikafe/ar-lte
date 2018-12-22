@@ -1,5 +1,5 @@
 {application, ar_lte_lib,
- [{description, "Aigbe Research Erlan OTP LTE Library"},
+ [{description, "Aigbe Research LTE Library"},
   {vsn, "0.1.0"},
   {registered, []},
   {applications,
