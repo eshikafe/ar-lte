@@ -1,6 +1,8 @@
 # arLTE
 
-Some LTE Experiments
+Some LTE Experiments.
+
+Work in progress!
 
 
 Build
