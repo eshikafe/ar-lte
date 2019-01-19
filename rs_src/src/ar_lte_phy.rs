@@ -1,25 +1,17 @@
 // Copyright (c) 2018 Aigbe Research
-// ar_lte_phy.rs
-// LTE Physical Layer
-// Compliance: 3GPP TS 36.211
-
-// Physical layer processing:
-// 	  scrambling
-// 	  modulation
-// 	  layer mapping
-// 	  precoding
-// 	  mapping to resource elements
-// 	  OFDM signal generation
-
-// 	Input to the physical layer: codewords
+// ar_lte_phy.rs - LTE Physical Layer
+// Compliance: 
+//      3GPP TS 36.211  
+//      3GPP TS 36.212 
+//      3GPP TS 36.216 
+//      3GPP TS 36.213 
+//      3GPP TS 36.214 
 
 
-const N_SYMB_DL_NORMAL_CP: u8 = 7;
+mod phy_layer_ts36211; // Physical channels and modulation
+mod phy_layer_ts36212; // Multiplexing and channel coding
+mod phy_layer_ts36213; // Physical layer for relaying operation
+mod phy_layer_ts36214; // Physical layer procedures
+mod phy_layer_ts36216; // Physical layer - Measurements
 
-fn pseudo_rand_seq() {
-    // TS 36.211 V12.2.0, section 7.2
-   // Pseudo-random sequences are defined by _a length-31 Gold sequence
-   i:u32;
-   x1:u32, n1:u32, x2:u32, n2:u32;
 
-}

@@ -1,32 +1,18 @@
-/* 
-  Copyright (c) 2015 - 2017 Aigbe Research
-
-  ar_lte_phy_ts36211.c
- 
- TS 36.211: Physical channels and modulation 
-				
- Physical layer processing:
-	  scrambling
-	  modulation
-	  layer mapping
-	  precoding
-	  mapping to resource elements
-	  OFDM signal generation
-
-	Input to the physical layer: codewords
+//   Copyright (c) 2019 Aigbe Research
+//   phy_layer_ts36211.rs
+//   TS 36.211: Physical channels and modulation 
+//
+//  Physical layer processing:
+// 	  scrambling
+// 	  modulation
+// 	  layer mapping
+// 	  precoding
+// 	  mapping to resource elements
+// 	  OFDM signal generation
+//
+// 	Input to the physical layer: codewords
   
 
-*/
-
-#include <math.h>
-#include <stdint.h>
-#include "ue_radio_tx_reception_ts36101.h"
-#include "ar_lte_phy_scrambling.h"
-#include "ar_lte_phy_modulation.h"
-#include "ar_lte_phy_layer_mapping.h"
-#include "ar_lte_phy_precoding.h"
-#include "ar_lte_phy_re_mapping.h"
-#include "ar_lte_phy_ofdm_signal_gen.h"
 
 
 
@@ -88,20 +74,20 @@ double _a = 1/sqrt(2)
 double _b = 1/sqrt(10)
 double _c = 1/sqrt(42)
 
-/*BPSK - TS 36.211 V12.2.0, section 7.1.1, Table 7.1.1-1 */
+// BPSK - TS 36.211 V12.2.0, section 7.1.1, Table 7.1.1-1 */
 _bpsk = (complex(_a,_a), complex(-_a,-_a))
 
-# QPSK - TS 36.211 V12.2.0, section 7.1.2, Table 7.1.2-1
+// QPSK - TS 36.211 V12.2.0, section 7.1.2, Table 7.1.2-1
 _qpsk = (complex(_a,_a), complex(_a,-_a),complex(-_a,_a),complex(-_a,-_a))
 
-# 16QAM - TS 36.211 V12.2.0, section 7.1.3, Table 7.1.3-1
+// 16QAM - TS 36.211 V12.2.0, section 7.1.3, Table 7.1.3-1
 _16qam = (complex(_b,_b), complex(_b,3*_b), complex(3*_b,_b), complex(3*_b,3*_b),
            complex(_b,-_b), complex(_b,-3*_b), complex(3*_b,-_b), complex(3*_b,-3*_b),
            complex(-_b,_b), complex(-_b,3*_b), complex(-3*_b,_b), complex(-3*_b,3*_b),
            complex(-_b,-_b), complex(-_b,-3*_b), complex(-3*_b,-_b),complex(-3*_b,-3*_b)
            )
 
-# 64QAM - TS 36.211 V12.2.0, section 7.1.4, Table 7.1.4-1
+// 64QAM - TS 36.211 V12.2.0, section 7.1.4, Table 7.1.4-1
 _64qam = (complex(3*_c,3*_c), complex(3*_c,_c), complex(_c,3*_c), complex(_c,_c),
            complex(3*_c,5*_c), complex(3*_c,7*_c), complex(_c,5*_c), complex(_c,7*_c),
            complex(5*_c,3*_c), complex(5*_c,_c), complex(7*_c,3*_c), complex(7*_c,_c),
