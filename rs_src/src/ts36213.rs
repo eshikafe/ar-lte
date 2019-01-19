@@ -1,7 +1,7 @@
 // Copyright (c) 2019 Aigbe Research
-// phy_layer_ts36213.rs
-//  TS 36.213: Physical layer procedures
-//  The scope of this specification is to establish the characteristics of the physical layer procedures, and to specify:
+// ts36213.rs
+// TS 36.213: Physical layer procedures
+// The scope of this specification is to establish the characteristics of the physical layer procedures, and to specify:
 //  - Synchronisation procedures, including cell search procedure and timing synchronisation;
 //  - Power control procedure;
 //  - Random access procedure;

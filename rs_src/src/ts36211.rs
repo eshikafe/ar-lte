@@ -1,5 +1,5 @@
 //   Copyright (c) 2019 Aigbe Research
-//   phy_layer_ts36211.rs
+//   ts36211.rs
 //   TS 36.211: Physical channels and modulation 
 //
 //  Physical layer processing:
