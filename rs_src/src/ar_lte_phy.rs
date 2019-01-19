@@ -8,10 +8,10 @@
 //      3GPP TS 36.214 
 
 
-mod ts36211; // Physical channels and modulation
-mod ts36212; // Multiplexing and channel coding
-mod ts36213; // Physical layer for relaying operation
-mod ts36214; // Physical layer procedures
-mod ts36216; // Physical layer - Measurements
+mod ts_36211; // Physical channels and modulation
+mod ts_36212; // Multiplexing and channel coding
+mod ts_36213; // Physical layer for relaying operation
+mod ts_36214; // Physical layer procedures
+mod ts_36216; // Physical layer - Measurements
 
 

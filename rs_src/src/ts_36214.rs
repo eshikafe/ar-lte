@@ -1,5 +1,5 @@
 // (c) 2019 Aigbe Research
-//  ts36214.rs
+//  ts_36214.rs
 //  3GPP TS 36.214: Physical layer - Measurements
 //  The scope of this specification is to establish 
 //  the characteristics of the physical layer measurements, and to specify:

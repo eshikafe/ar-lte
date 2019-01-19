@@ -1,5 +1,5 @@
 //   Copyright (c) 2019 Aigbe Research
-//   ts36211.rs
+//   ts_36211.rs
 //   TS 36.211: Physical channels and modulation 
 //
 //  Physical layer processing:
@@ -126,8 +126,8 @@ fn pseudo_rand_seq(n_bits: u32, cinit: u32) -> u32 {
     let x2: u32 = 0;
     //let n2: u32 = 0;
 
-    x1 = _x1();
-    x2 = _x2(cinit);
+    x1 = x_1();
+    x2 = x_2(cinit);
     let c: [u32; n_bits] = [0; n_bits];
     for i in 0..n_bits {
         n1 = ((x1 >> 3) ^ x1) & 0x1;
@@ -139,7 +139,7 @@ fn pseudo_rand_seq(n_bits: u32, cinit: u32) -> u32 {
     c
 }
 
-fn _x2(cinit: u32) -> u32 {
+fn x_2(cinit: u32) -> u32 {
     let x2: u32 = cinit
     for i in 0..(Nc-31) {
         // Advance the 2nd m-sequence
@@ -149,7 +149,7 @@ fn _x2(cinit: u32) -> u32 {
     x2
 }
 
-fn _x1() -> u32 {
+fn x_1() -> u32 {
     // The first m-sequence shall be initialized with x1(0)=1,x1(n)=0,n=1,2,...,30.
     let x1: u32 = 1;
     // Advance the 1st m-sequence
@@ -162,10 +162,10 @@ fn _x1() -> u32 {
 
 fn scrambling(bits: &[u8], n_bits: u32, cinit: u32) -> &[u8] {
     // sb[i] = (_b[i] + _c[i]) mod 2
-    let c = pseudo_rand_seq(n_bits);
+    let prs = pseudo_rand_seq(n_bits);
     let s_bits: &[u8];
     for i in 0..n_bits {
-       s_bits[i] = b[i]^c[i]
+       s_bits[i] = bits[i]^prs[i]
     }
     s_bits
 }

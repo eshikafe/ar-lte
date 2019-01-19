@@ -1,5 +1,5 @@
 // (c) 2019 Aigbe Research
-//  ts36216.rs
+//  ts_36216.rs
 //  3GPP TS 36.216: Physical layer for relaying operation
 //  The scope of this specification is to establish the characteristics of eNB - RN transmissions, and to specify relayspecific
 //  advancements in relation to:
