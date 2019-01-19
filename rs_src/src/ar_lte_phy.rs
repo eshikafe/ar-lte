@@ -3,6 +3,16 @@
 // LTE Physical Layer
 // Compliance: 3GPP TS 36.211
 
+// Physical layer processing:
+// 	  scrambling
+// 	  modulation
+// 	  layer mapping
+// 	  precoding
+// 	  mapping to resource elements
+// 	  OFDM signal generation
+
+// 	Input to the physical layer: codewords
+
 
 const N_SYMB_DL_NORMAL_CP: u8 = 7;
 
