@@ -116,7 +116,7 @@ const bpsk_sym: [ModulationSymbol; 2] = [ModulationSymbol{I: A, Q: A}, Modulatio
 // Pseudo random sequences
 // TS 36.211 V12.2.0, section 7.2
 // Pseudo-random sequences are defined by _a length-31 Gold sequence
-fn pseudo_rand_seq(const n_bits: u32, cinit: u32) -> u32 {
+fn pseudo_rand_seq(n_bits: u32, cinit: u32) -> u32 {
     //let i: u32  = 0;
     let mut x1: u32 = 0;
     let mut n1: u32 = 0;
@@ -159,7 +159,7 @@ pub fn x_1() -> u32 {
     x1  //'0x54d21b24' = hex(x1)
 }
 
-fn scrambling(bits: &[u8], const n_bits: u32, cinit: u32) -> &[u8] {
+fn scrambling(bits: &[u8], n_bits: u32, cinit: u32) -> &[u8] {
     // sb[i] = (_b[i] + _c[i]) mod 2
     let prs = pseudo_rand_seq(n_bits, cinit);
     let s_bits: &[u8];
@@ -172,7 +172,7 @@ fn scrambling(bits: &[u8], const n_bits: u32, cinit: u32) -> &[u8] {
 // Modulation mapper (TS 36.211 V12.2.0 7.1)
 // The modulation mapper takes binary digits, 0 or 1, as input
 // and produces complex-valued modulation symbols, x=I+jQ, as output
-fn modulation_mapper(bits: &[u8], const n_bits: u32, mod_type: ModulationType) {
+fn modulation_mapper(bits: &[u8], n_bits: u32, mod_type: ModulationType) {
     
     match mod_type {
         ModulationType::ModTypeBPSK => {
