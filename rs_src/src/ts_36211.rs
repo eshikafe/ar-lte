@@ -14,8 +14,8 @@
 
 
 // Frame structure (4)
-const Ts: f64 =  1.0/(15000.0*2048.0);  // seconds (basic time unit)
-const Tf: f64 = 307200.0 * Ts;      // 10ms duration (radio frame duration)
+const TS: f64 =  1.0/(15000.0*2048.0);  // seconds (basic time unit)
+const TF: f64 = 307200.0 * TS;      // 10ms duration (radio frame duration)
 
 const LTE_PHY_RADIO_FRAME_TYPE1: &str = "FDD";
 const LTE_PHY_RADIO_FRAME_TYPE2: &str = "TDD";
@@ -32,7 +32,7 @@ enum RadioTxType {
 //    For FDD, DL transmission = 10 subframes, UL transmission = 10 subframes
 //    in each Tf interval
 
-const T_slot: f64 = 15360.0 * Ts; // 0.5ms (radio frame type1/type2 slot duration) */
+const T_SLOT: f64 = 15360.0 * TS; // 0.5ms (radio frame type1/type2 slot duration) */
 
 //  Uplink physical channels (5.1.1)
 //     PUSCH
@@ -63,17 +63,17 @@ struct ul_phy_channel
 }
 
 enum ModulationType {
-    MOD_TYPE_BPSK,
-    MOD_TYPE_QPSK,
-    MOD_TYPE_16QAM,
-    MOD_TYPE_64QAM,
+    ModTypeBPSK,
+    ModTypeQPSK,
+    ModType16QAM,
+    ModType64QAM,
 }
 
-const Nc: u32 = 1600;
+const NC: u32 = 1600;
 
-const _a: f64 = 1.0/2.0_f64.sqrt();
-const _b: f64 = 1.0/10.0_f64.sqrt();
-const _c: f64 = 1.0/42.0_f64.sqrt();
+const A: f64 = 1.0/2.0_f64.sqrt();
+const B: f64 = 1.0/10.0_f64.sqrt();
+const C: f64 = 1.0/42.0_f64.sqrt();
 
 struct ModulationSymbol {
     // I+jQ
@@ -82,7 +82,7 @@ struct ModulationSymbol {
 }
 
 // BPSK - TS 36.211 V12.2.0, section 7.1.1, Table 7.1.1-1 */
-const bpsk_sym: [ModulationSymbol; 2] = [ModulationSymbol{I: _a, Q: _a}, ModulationSymbol{I: -_a, Q: -_a}];
+const bpsk_sym: [ModulationSymbol; 2] = [ModulationSymbol{I: A, Q: A}, ModulationSymbol{I: -A, Q: -A}];
 
 // QPSK - TS 36.211 V12.2.0, section 7.1.2, Table 7.1.2-1
 // _qpsk = (complex(_a,_a), complex(_a,-_a),complex(-_a,_a),complex(-_a,-_a))
@@ -116,12 +116,12 @@ const bpsk_sym: [ModulationSymbol; 2] = [ModulationSymbol{I: _a, Q: _a}, Modulat
 // Pseudo random sequences
 // TS 36.211 V12.2.0, section 7.2
 // Pseudo-random sequences are defined by _a length-31 Gold sequence
-fn pseudo_rand_seq(n_bits: u32, cinit: u32) -> u32 {
-    let i: u32  = 0;
-    let x1: u32 = 0;
-    let n1: u8 = 0;
-    let x2: u32 = 0;
-    let n2: u8 = 0;
+fn pseudo_rand_seq(const n_bits: u32, cinit: u32) -> u32 {
+    //let i: u32  = 0;
+    let mut x1: u32 = 0;
+    let mut n1: u32 = 0;
+    let mut x2: u32 = 0;
+    let mut n2: u32 = 0;
 
     x1 = x_1();
     x2 = x_2(cinit);
@@ -137,9 +137,9 @@ fn pseudo_rand_seq(n_bits: u32, cinit: u32) -> u32 {
 }
 
 fn x_2(cinit: u32) -> u32 {
-    let x2: u32 = cinit;
-    let n: u8 = 0;
-    for i in 0..(Nc-31) {
+    let mut x2: u32 = cinit;
+    let mut n: u32 = 0;
+    for _i in 0..(NC-31) {
         // Advance the 2nd m-sequence
         n = ((x2 >> 3)^(x2 >> 2)^(x2 >> 1)^x2) & 0x1;
         x2 = (x2 >> 1) | (n << 30);
@@ -149,19 +149,19 @@ fn x_2(cinit: u32) -> u32 {
 
 pub fn x_1() -> u32 {
     // The first m-sequence shall be initialized with x1(0)=1,x1(n)=0,n=1,2,...,30.
-    let x1: u32 = 1;
-    let n: u8 = 0;
+    let mut x1: u32 = 1;
+    let mut n: u32 = 0;
     // Advance the 1st m-sequence
-    for i in 0..(Nc-31) {
+    for i in 0..(NC-31) {
         n = ((x1 >> 3)^(x1)) & 0x01;
         x1 = (x1 >> 1) | (n << 30);
     }            
     x1  //'0x54d21b24' = hex(x1)
 }
 
-fn scrambling(bits: &[u8], n_bits: u32, cinit: u32) -> &[u8] {
+fn scrambling(bits: &[u8], const n_bits: u32, cinit: u32) -> &[u8] {
     // sb[i] = (_b[i] + _c[i]) mod 2
-    let prs = pseudo_rand_seq(n_bits);
+    let prs = pseudo_rand_seq(n_bits, cinit);
     let s_bits: &[u8];
     for i in 0..n_bits {
        s_bits[i] = bits[i]^prs[i]
@@ -172,16 +172,25 @@ fn scrambling(bits: &[u8], n_bits: u32, cinit: u32) -> &[u8] {
 // Modulation mapper (TS 36.211 V12.2.0 7.1)
 // The modulation mapper takes binary digits, 0 or 1, as input
 // and produces complex-valued modulation symbols, x=I+jQ, as output
-fn modulation_mapper(bits: &[u8], n_bits: u32, mod_type: ModulationType) -> ModulationSymbol {
-    if let mod_type = ModulationType::MOD_TYPE_BPSK {
-        // 1 bit at a time
-        let sym: [ModulationSymbol; n_bits] = [ModulationSymbol{I: 0.0, Q: 0.0}; n_bits];
-        for i in 0..n_bits {
-            sym[i].I = bpsk_sym[bits[i]].I;
-            sym[i].Q = bpsk_sym[bits[i]].Q;
+fn modulation_mapper(bits: &[u8], const n_bits: u32, mod_type: ModulationType) {
+    
+    match mod_type {
+        ModulationType::ModTypeBPSK => {
+            // 1 bit at a time
+            let sym: [ModulationSymbol; n_bits] = [ModulationSymbol{I: 0.0, Q: 0.0}; n_bits];
+            for i in 0..n_bits {
+                sym[i].I = bpsk_sym[bits[i]].I;
+                sym[i].Q = bpsk_sym[bits[i]].Q;
+                println!("{},{}", sym[i].I, sym[i].Q)
+            }   
         }
-        sym
+
+        ModulationType::ModTypeQPSK => println!("QPSK"),
+        ModulationType::ModType16QAM => println!("16QAM"),
+        ModulationType::ModType64QAM => println!("64QAM"),
+        
     }
+    
 }
 
 fn layer_mapping() {

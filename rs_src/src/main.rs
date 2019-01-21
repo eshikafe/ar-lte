@@ -5,5 +5,5 @@ fn main() {
     // target: src/lib.rs
 
     let x1 = ts_36211::x_1();
-    assert_eq!(0x54d21b24, x1);
+    println!(" x_1() => 0x{:x}, expects: 0x54d21b24; Result:{}", x1, x==0x54d21b24);
 }
