@@ -1,9 +1,24 @@
-mod ts_36211;
+#[macro_use]
+extern crate lazy_static;
+
+mod phy_layer;
 
 fn main() {
-    //todo
-    // target: src/lib.rs
+   println!("BPSK Symbol (I + jQ) = {} + j{}", phy_layer::ts_36211::BPSK_SYMBOL[0].i,
+                     phy_layer::ts_36211::BPSK_SYMBOL[0].q);
+}
 
-    let x1 = ts_36211::x_1();
-    println!(" x_1() => 0x{:x}, expects: 0x54d21b24; Result:{}", x1, x1 ==0x54d21b24);
+
+// LTE Physical Layer procedure tests
+#[test]
+fn test_x1() {
+    let x1 = phy_layer::ts_36211::x_1();
+    //assert_eq!(x1,0x54d21b24);
+    println!("x1 = 0x{:x}", x1);
+}
+
+#[test]
+fn test_x2() {
+    let x2 = phy_layer::ts_36211::x_2(100);
+    println!("x2 = 0x{:x}", x2);
 }
