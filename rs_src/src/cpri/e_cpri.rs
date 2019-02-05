@@ -10,15 +10,15 @@
 //  * Experiment with DPDK
 //  * Option 8 split option / split point E
 
-//  eCPRI Services
+//                    eCPRI Services
 //  -----------------------------------------------------
 //  User Data | Real-Time Control | other eCPRI services |
 //  -----------------------------------------------------
 //             eCPRI protocol layer                      |
 //  -----------------------------------------------------
-//                    UDP                                |
+//                       UDP                             |
 //  -----------------------------------------------------
-//                   IP
+//                       IP
 
 
 // The maximum supported payload size is 2^16 -1 but the actual size may
