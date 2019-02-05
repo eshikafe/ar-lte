@@ -4,8 +4,13 @@ extern crate lazy_static;
 mod phy_layer;
 
 fn main() {
-   println!("BPSK Symbol (I + jQ) = {} + j{}", phy_layer::ts_36211::BPSK_SYMBOL[0].i,
-                     phy_layer::ts_36211::BPSK_SYMBOL[0].q);
+
+    for _i in 0..2 {
+        println!("BPSK Symbol {}: (I + jQ) = {} + {}j",_i, 
+        phy_layer::ts_36211::BPSK_SYMBOL[_i].i,
+        phy_layer::ts_36211::BPSK_SYMBOL[_i].q);
+    }
+   
 }
 
 
