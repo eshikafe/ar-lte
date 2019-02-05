@@ -36,53 +36,60 @@ enum ModulationType {
 const NC: u32 = 1600;
 
 // I+jQ
-pub struct ModulationSymbol {
+pub struct IQ {
     pub i: f64, // real
     pub q: f64, // imaginary
 }
 
 lazy_static! {
-    static ref A: f64 = 1.0/(2.0_f64.sqrt());
+    static ref A: f64 = 1.0/2.0_f64.sqrt();
     static ref B: f64 = 1.0/10.0_f64.sqrt();
     static ref C: f64 = 1.0/42.0_f64.sqrt();
     
     
     // BPSK - TS 36.211 V12.2.0, section 7.1.1, Table 7.1.1-1
-    pub static ref BpskSymbol: [ModulationSymbol; 2] = [ModulationSymbol{i: *A, q: *A}, 
-    ModulationSymbol{i: -*A, q: -*A}];
+    pub static ref ModSymBpsk: [IQ; 2] = [IQ{i: *A, q: *A}, 
+    IQ{i: -*A, q: -*A}];
 
     // QPSK - TS 36.211 V12.2.0, section 7.1.2, Table 7.1.2-1
-    pub static ref QpskSymbol: [ModulationSymbol; 4]  = [ModulationSymbol{i: *A, q: *A}, 
-    ModulationSymbol{i: *A, q: -*A},ModulationSymbol{i: -*A, q: *A},
-    ModulationSymbol{i: -*A, q: -*A}];
+    pub static ref ModSymQpsk: [IQ; 4]  = [
+        IQ{i: *A, q: *A}, IQ{i: *A, q: -*A},
+        IQ{i: -*A, q: *A},IQ{i: -*A, q: -*A}
+    ];
 
     //16QAM - TS 36.211 V12.2.0, section 7.1.3, Table 7.1.3-1
-// _16qam = (complex(_b,_b), complex(_b,3*_b), complex(3*_b,_b), complex(3*_b,3*_b),
-//            complex(_b,-_b), complex(_b,-3*_b), complex(3*_b,-_b), complex(3*_b,-3*_b),
-//            complex(-_b,_b), complex(-_b,3*_b), complex(-3*_b,_b), complex(-3*_b,3*_b),
-//            complex(-_b,-_b), complex(-_b,-3*_b), complex(-3*_b,-_b),complex(-3*_b,-3*_b)
-//            )
+    pub static ref ModSym16Qam: [IQ; 16] = [
+        IQ{i: *B, q: *B}, IQ{i: *B, q: *B*3.0}, 
+        IQ{i: *B*3.0, q: *B}, IQ{i: *B*3.0, q: *B*3.0}, 
+        IQ{i: *B, q: -*B}, IQ{i: *B, q: *B*-3.0}, 
+        IQ{i: *B, q: *B}, IQ{i: *B*3.0, q: *B*-3.0},
+        IQ{i: -*B, q: *B},IQ{i: -*B, q: *B*3.0},
+        IQ{i: *B*3.0, q: *B}, IQ{i: *B*-3.0, q: *B*3.0},
+        IQ{i: -*B, q: -*B}, IQ{i: -*B, q: *B*-3.0}, 
+        IQ{i: *B*-3.0, q: -*B},IQ{i: *B*-3.0, q: *B*-3.0}
+    ];
+
+    // 64QAM - TS 36.211 V12.2.0, section 7.1.4, Table 7.1.4-1
+    pub static ref ModSym64Qam: [IQ; 64] = [
+        IQ{i: *C*3.0, q: *C*3.0}, IQ{i: 3.0**C, q: *C}, IQ{i: *C, q: 3.0**C}, IQ{i: *C, q: *C},
+           IQ{i: 3.0**C, q: 5.0**C}, IQ{i: 3.0**C, q: 7.0**C}, IQ{i: *C, q: 5.0**C}, IQ{i: *C, q: 7.0**C},
+           IQ{i: 5.0**C, q: 3.0**C}, IQ{i: 5.0**C, q: *C}, IQ{i: 7.0**C, q: 3.0**C}, IQ{i: 7.0**C, q: *C},
+           IQ{i: 5.0**C, q: 5.0**C}, IQ{i: 5.0**C, q: 7.0**C}, IQ{i: 7.0**C, q: 5.0**C}, IQ{i: 7.0**C, q: 7.0**C},
+           IQ{i: 3.0**C, q: -3.0**C}, IQ{i: 3.0**C, q: -*C}, IQ{i: *C, q: -3.0**C}, IQ{i: *C, q: -*C},
+           IQ{i: 3.0**C, q: -5.0**C}, IQ{i: 3.0**C, q: -7.0**C}, IQ{i: *C, q: -5.0**C}, IQ{i: *C, q: -7.0**C},
+           IQ{i: 5.0**C, q: -3.0**C}, IQ{i: 5.0**C, q: -*C}, IQ{i: 7.0**C, q: -3.0**C}, IQ{i: 7.0**C, q: -*C},
+           IQ{i: 5.0**C, q: -5.0**C}, IQ{i: 5.0**C, q: -7.0**C}, IQ{i: 7.0**C, q: -5.0**C}, IQ{i: 7.0**C, q: -7.0**C},
+           IQ{i: 3.0**C, q: 3.0**C}, IQ{i: -3.0**C, q: *C}, IQ{i: -*C, q: 3.0**C}, IQ{i: -*C, q: *C},
+           IQ{i: -3.0**C, q: 5.0**C}, IQ{i: -3.0**C, q: 7.0**C}, IQ{i: -*C, q: 5.0**C}, IQ{i: -*C, q: 7.0**C},
+           IQ{i: -5.0**C, q: 3.0**C}, IQ{i: -5.0**C, q: *C}, IQ{i: -7.0**C, q: 3.0**C}, IQ{i: -7.0**C, q: *C},
+           IQ{i: -5.0**C, q: 5.0**C}, IQ{i: -5.0**C, q: 7.0**C}, IQ{i: -7.0**C, q: 5.0**C}, IQ{i: -7.0**C, q: 7.0**C},
+           IQ{i: -3.0**C, q: -3.0**C}, IQ{i: -3.0**C, q: -*C}, IQ{i: -*C, q: -3.0**C}, IQ{i: -*C, q: -*C},
+           IQ{i: -3.0**C, q: -5.0**C}, IQ{i: -3.0**C, q: -7.0**C}, IQ{i: -*C, q: -5.0**C}, IQ{i: -*C, q: -7.0**C},
+           IQ{i: -5.0**C, q: -3.0**C}, IQ{i: -5.0**C, q: -*C}, IQ{i: -7.0**C, q: -3.0**C}, IQ{i: -7.0**C, q: -*C},
+           IQ{i: -5.0**C, q: -5.0**C}, IQ{i: -5.0**C, q: -7.0**C}, IQ{i: -7.0**C, q: -5.0**C}, IQ{i: -7.0**C, q: -7.0**C}
+    ];
 }
 
-
-// // 64QAM - TS 36.211 V12.2.0, section 7.1.4, Table 7.1.4-1
-// _64qam = (complex(3*_c,3*_c), complex(3*_c,_c), complex(_c,3*_c), complex(_c,_c),
-//            complex(3*_c,5*_c), complex(3*_c,7*_c), complex(_c,5*_c), complex(_c,7*_c),
-//            complex(5*_c,3*_c), complex(5*_c,_c), complex(7*_c,3*_c), complex(7*_c,_c),
-//            complex(5*_c,5*_c), complex(5*_c,7*_c), complex(7*_c,5*_c), complex(7*_c,7*_c),
-//            complex(3*_c,-3*_c), complex(3*_c,-_c), complex(_c,-3*_c), complex(_c,-_c),
-//            complex(3*_c,-5*_c), complex(3*_c,-7*_c), complex(_c,-5*_c), complex(_c,-7*_c),
-//            complex(5*_c,-3*_c), complex(5*_c,-_c), complex(7*_c,-3*_c), complex(7*_c,-_c),
-//            complex(5*_c,-5*_c), complex(5*_c,-7*_c), complex(7*_c,-5*_c), complex(7*_c,-7*_c),
-//            complex(3*_c,3*_c), complex(-3*_c,_c), complex(-_c,3*_c), complex(-_c,_c),
-//            complex(-3*_c,5*_c), complex(-3*_c,7*_c), complex(-_c,5*_c), complex(-_c,7*_c),
-//            complex(-5*_c,3*_c), complex(-5*_c,_c), complex(-7*_c,3*_c), complex(-7*_c,_c),
-//            complex(-5*_c,5*_c), complex(-5*_c,7*_c), complex(-7*_c,5*_c), complex(-7*_c,7*_c),
-//            complex(-3*_c,-3*_c), complex(-3*_c,-_c), complex(-_c,-3*_c), complex(-_c,-_c),
-//            complex(-3*_c,-5*_c), complex(-3*_c,-7*_c), complex(-_c,-5*_c), complex(-_c,-7*_c),
-//            complex(-5*_c,-3*_c), complex(-5*_c,-_c), complex(-7*_c,-3*_c), complex(-7*_c,-_c),
-//            complex(-5*_c,-5*_c), complex(-5*_c,-7*_c), complex(-7*_c,-5*_c), complex(-7*_c,-7*_c)
-//         )
 
 pub fn x_2(cinit: u32) -> u32 {
     let mut x2: u32 = cinit;
@@ -133,7 +140,7 @@ pub fn x_1() -> u32 {
 // }
 
 // fn scrambling(bits: &[u8], n_bits: usize, cinit: u32) -> &[u8] {
-//     // sb[i] = (_b[i] + _c[i]) mod 2
+//     // sb[i] = (_b[i] + *C[i]) mod 2
 //     let prs = pseudo_rand_seq(n_bits, cinit);
 //     let s_bits: &[u8];
 //     for i in 0..n_bits {
@@ -150,7 +157,7 @@ pub fn x_1() -> u32 {
 //     match mod_type {
 //         ModulationType::ModTypeBPSK => {
 //             // 1 bit at a time
-//             let mod_symbol = vec![ModulationSymbol{i: 0.0, q: 0.0}; n_bits];
+//             let mod_symbol = vec![IQ{i: 0.0, q: 0.0}; n_bits];
 //             for i in 0..n_bits {
 //                 mod_symbol[i].I = BPSK_SYMBOL[bits[i]].i;
 //                 mod_symbol[i].Q = BPSK_SYMBOL[bits[i]].q;
