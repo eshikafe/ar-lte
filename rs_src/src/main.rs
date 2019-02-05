@@ -5,10 +5,10 @@ mod phy_layer;
 
 fn main() {
 
-    for _i in 0..4 {
-        println!("QPSK Symbol {}: (I + jQ) = {} + {}j",_i, 
-        phy_layer::ts_36211::QpskSymbol[_i].i,
-        phy_layer::ts_36211::QpskSymbol[_i].q);
+    for _i in 0..64 {
+        println!("64QAM Symbol {}: (I + jQ) = {} + {}j",_i, 
+        phy_layer::ts_36211::ModSym64Qam[_i].i,
+        phy_layer::ts_36211::ModSym64Qam[_i].q);
     }
    
 }
