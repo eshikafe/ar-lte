@@ -45,23 +45,25 @@ lazy_static! {
     static ref A: f64 = 1.0/(2.0_f64.sqrt());
     static ref B: f64 = 1.0/10.0_f64.sqrt();
     static ref C: f64 = 1.0/42.0_f64.sqrt();
-    pub static ref BPSK_SYMBOL: [ModulationSymbol; 2] = [ModulationSymbol{i: *A, q: *A}, 
-                                            ModulationSymbol{i: -*A, q: -*A}];
-}
+    
+    
+    // BPSK - TS 36.211 V12.2.0, section 7.1.1, Table 7.1.1-1
+    pub static ref BpskSymbol: [ModulationSymbol; 2] = [ModulationSymbol{i: *A, q: *A}, 
+    ModulationSymbol{i: -*A, q: -*A}];
 
+    // QPSK - TS 36.211 V12.2.0, section 7.1.2, Table 7.1.2-1
+    pub static ref QpskSymbol: [ModulationSymbol; 4]  = [ModulationSymbol{i: *A, q: *A}, 
+    ModulationSymbol{i: *A, q: -*A},ModulationSymbol{i: -*A, q: *A},
+    ModulationSymbol{i: -*A, q: -*A}];
 
-// BPSK - TS 36.211 V12.2.0, section 7.1.1, Table 7.1.1-1 */
-
-
-// QPSK - TS 36.211 V12.2.0, section 7.1.2, Table 7.1.2-1
-// _qpsk = (complex(_a,_a), complex(_a,-_a),complex(-_a,_a),complex(-_a,-_a))
-
-// // 16QAM - TS 36.211 V12.2.0, section 7.1.3, Table 7.1.3-1
+    //16QAM - TS 36.211 V12.2.0, section 7.1.3, Table 7.1.3-1
 // _16qam = (complex(_b,_b), complex(_b,3*_b), complex(3*_b,_b), complex(3*_b,3*_b),
 //            complex(_b,-_b), complex(_b,-3*_b), complex(3*_b,-_b), complex(3*_b,-3*_b),
 //            complex(-_b,_b), complex(-_b,3*_b), complex(-3*_b,_b), complex(-3*_b,3*_b),
 //            complex(-_b,-_b), complex(-_b,-3*_b), complex(-3*_b,-_b),complex(-3*_b,-3*_b)
 //            )
+}
+
 
 // // 64QAM - TS 36.211 V12.2.0, section 7.1.4, Table 7.1.4-1
 // _64qam = (complex(3*_c,3*_c), complex(3*_c,_c), complex(_c,3*_c), complex(_c,_c),
