@@ -118,26 +118,26 @@ pub fn x_1() -> u32 {
 // Generates pseudo random sequence
 // TS 36.211 V12.2.0, section 7.2
 // Pseudo-random sequences are defined by _a length-31 Gold sequence
-// fn pseudo_rand_seq(len: usize, c_init: u32) -> Vec<u32> {
-//     let mut x1: u32 = 0;
-//     let mut n1: u32 = 0;
-//     let mut x2: u32 = 0;
-//     let mut n2: u32 = 0;
-//     let i: usize = 0;
+fn pseudo_rand_seq(len: usize, c_init: u32) -> Vec<u32> {
+    let mut x1: u32 = 0;
+    let mut n1: u32 = 0;
+    let mut x2: u32 = 0;
+    let mut n2: u32 = 0;
+    let i: usize = 0;
 
-//     x1 = x_1();
-//     x2 = x_2(c_init);
-//     let c = vec![0; len];
-//     for i in 0..len {
-//         n1 = ((x1 >> 3) ^ x1) & 0x1;
-//         n2 = ((x2 >> 3)^(x2 >> 2)^(x2 >> 1)^x2) & 0x1;
-//         x1 = (x1 >> 1) | (n1 << 30);
-//         x2 = (x2 >> 1) | (n2 << 30);
-//         c[i] = n1 ^ n2;
-//         println!("{}", c[i]);
-//     }
-//     c
-// }
+    x1 = x_1();
+    x2 = x_2(c_init);
+    let c = vec![0; len];
+    for _i in 0..len {
+        n1 = ((x1 >> 3) ^ x1) & 0x1;
+        n2 = ((x2 >> 3)^(x2 >> 2)^(x2 >> 1)^x2) & 0x1;
+        x1 = (x1 >> 1) | (n1 << 30);
+        x2 = (x2 >> 1) | (n2 << 30);
+        c[_i] = n1 ^ n2;
+        println!("{}", c[i]);
+    }
+    c
+}
 
 // fn scrambling(bits: &[u8], n_bits: usize, cinit: u32) -> &[u8] {
 //     // sb[i] = (_b[i] + *C[i]) mod 2
