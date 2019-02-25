@@ -1,5 +1,5 @@
-{application, ar_lte_lib,
- [{description, "Aigbe Research LTE Library"},
+{application, ngr_lib,
+ [{description, "ngr Library"},
   {vsn, "0.1.0"},
   {registered, []},
   {applications,

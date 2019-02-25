@@ -1,4 +1,4 @@
-# pylte_x2.py
+# ngr_x2.py
 #
 # 3GPP LTE X2 Interface implementation in Python 
 #
