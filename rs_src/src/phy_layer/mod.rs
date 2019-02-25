@@ -1,4 +1,4 @@
-// ar_lte_phy.rs - LTE Physical Layer
+// ngr_phy.rs - Physical Layer
 // Copyright (c) 2018 Aigbe Research
 // Compliance: 
 //      3GPP TS 36.211  
