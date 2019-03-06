@@ -1,8 +1,9 @@
 [package]
-name = "ar_lte_lib_rust"
+name = "ngr"
 version = "0.1.0"
 authors = ["Aigbe Research"]
 edition = "2018"
 
 [dependencies]
 lazy_static = "1.2.0"
+structopt = "0.2.10"
