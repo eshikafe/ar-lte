@@ -1,6 +1,6 @@
 # ngr
 
-[![Build Status](https://travis-ci.org/eshikafe/ar-lte.svg?branch=master)](https://travis-ci.org/eshikafe/ngr)
+[![Build Status](https://travis-ci.org/eshikafe/ngr.svg?branch=master)](https://travis-ci.org/eshikafe/ngr)
 
 Some experiments to realize a low-cost, low-power and high-capacity 4G/5G RAN
 
