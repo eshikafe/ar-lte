@@ -1,5 +1,5 @@
 //  (c) 2018 Aigbe Research
-//  ngr_rohc.rs
+//  rohc.rs
 //  Robust Header Compression Protocol
 //  Compliance: 
 //      rfc3095
