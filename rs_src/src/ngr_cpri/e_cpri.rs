@@ -7,7 +7,6 @@
 //   	Common Public Radio Interface: eCPRI Interface Specification
 //   	http://www.cpri.info/downloads/eCPRI_v_1_1_2018_01_10.pdf
 
-//  * Experiment with DPDK
 //  * Option 8 split option / split point E
 
 //                    eCPRI Services
