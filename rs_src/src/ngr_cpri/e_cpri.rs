@@ -7,7 +7,7 @@
 //   	Common Public Radio Interface: eCPRI Interface Specification
 //   	http://www.cpri.info/downloads/eCPRI_v_1_1_2018_01_10.pdf
 
-//  * Option 8 split option / split point E
+//  * split option: D, E
 
 //                    eCPRI Services
 //  -----------------------------------------------------
@@ -118,3 +118,6 @@ struct event_indication_msg_type {
 	num_faults_notif: u8, // = N 
 	fn: &fault_notif,
 }
+
+use std::net::UdpSocket;
+
