@@ -18,3 +18,40 @@ pub struct IQ {
     pub i: f64, // real
     pub q: f64, // imaginary
 }
+
+// LTE
+pub enum PhysicalChannel {
+    // Uplink 5.1.1
+    PUSCH, // Physical Uplink Shared Channel
+    PUCCH, // Physical Uplink Control Channel
+    PRACH, // Physcial Random Access Channel
+    
+    // Physical signals 5.1.2, 6.1.2
+    RefSignal, // Reference Signal
+    SyncSignal, // Synchronization Signal
+
+    // Downlink 6.1.1
+    PDSCH,
+    PBCH,
+    PMCH,
+    PCFICH,
+    PDCCH,
+    PHICH
+}
+
+pub enum Direction {
+    Uplink = 0,
+    Downlink,
+}
+
+pub struct RadioFrame {
+    N_cell_id: u32,
+}
+
+pub struct PhysicalLayer {
+    channel_type: PhysicalChannel,
+    direction: Direction,
+    scrambled_bits: Vec<u32>,
+    codeword_q: Vec<u32>,
+    radio_frame: RadioFrame,
+}
