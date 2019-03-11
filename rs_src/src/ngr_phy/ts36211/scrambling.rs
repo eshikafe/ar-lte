@@ -1,58 +1,77 @@
+// scrambling of coded bits in each of the codewords to be transmitted on a physical channel
+
 use super::common::*;
 
-pub fn scramble(bits: Vec<u8>, n_bits: usize, cinit: u32) -> Vec<u8> {
-    // sb[i] = (_b[i] + *C[i]) mod 2
-    let prs = pseudo_rand_seq(n_bits, cinit);
-    let s_bits: Vec<u8> = Vec::new();
-    for i in 0..n_bits {
-       s_bits.push(bits[i] ^ prs[i]);
+pub fn scramble(phy_layer: &PhysicalLayer, c_init: u32) {
+    match (*phy_layer.channel_type) {
+        PhysicalChannel::PUSCH => scramble_pusch(&phy_layer),
+        PhysicalChannel::PUCCH => scramble_pucch(&phy_layer),
+        PhysicalChannel::PBCH => scramble_pbch(&phy_layer),
+        PhysicalChannel::PCFICH => scramble_pcfich(&phy_layer),
+        PhysicalChannel::PDCCH => scramble_pdcch(&phy_layer), 
+        _ => println!("scrambling not implemented"),
     }
-    s_bits
 }
-
-fn x_2(cinit: u32) -> u32 {
-    let mut x2: u32 = cinit;
-    let mut n: u32 = 0;
-    for _i in 0..(NC-31) {
-        // Advance the 2nd m-sequence
-        n = ((x2 >> 3)^(x2 >> 2)^(x2 >> 1)^x2) & 0x1;
-        x2 = (x2 >> 1) | (n << 30);
-    }
-    x2
-}
-
-fn x_1() -> u32 {
-    // The first m-sequence shall be initialized with x1(0)=1,x1(n)=0,n=1,2,...,30.
-    let mut x1: u32 = 1;
-    let mut n: u32 = 0;
-    // Advance the 1st m-sequence
-    for i in 0..(NC-31) {
-        n = ((x1 >> 3)^(x1)) & 0x01;
-        x1 = (x1 >> 1) | (n << 30);
-    }            
-    x1  //'0x54d21b24' = hex(x1)
-}
-
 
 // Generates pseudo random sequence
 // TS 36.211 V12.2.0, section 7.2
 // Pseudo-random sequences are defined by _a length-31 Gold sequence
-fn pseudo_rand_seq(len: usize, c_init: u32) -> Vec<u32> {
-    let mut x1: u32 = 0;
-    let mut n1: u32 = 0;
-    let mut x2: u32 = 0;
-    let mut n2: u32 = 0;
-    let i: usize = 0;
+// Adapted from srsLTE: srsLTE/lib/src/phy/common/sequence.c
+//              OpenLTE liblte_phy.cc
+fn generate_prs(M_pn: usize, c_init: u32) -> Vec<u32> {
+    let mut x1: Vec<u32> = vec![0; m_pn + Nc +31];
+    let mut x2: Vec<u32> = vec![0; m_pn + Nc +31];
+    let mut c = vec![0; M_pn];
+    let mut n: usize = 0;
 
-    x1 = x_1();
-    x2 = x_2(c_init);
-    let mut c = vec![0; len];
-    for _i in 0..len {
-        n1 = ((x1 >> 3) ^ x1) & 0x1;
-        n2 = ((x2 >> 3)^(x2 >> 2)^(x2 >> 1)^x2) & 0x1;
-        x1 = (x1 >> 1) | (n1 << 30);
-        x2 = (x2 >> 1) | (n2 << 30);
-        c.push(n1 ^ n2);
+    for n in 0 ..= 30 {
+        x2[n] = (c_init >> n) & 0x1;
     }
-    c
+    
+    x1[0] = 1;
+
+    for n in 0 .. Nc + M_pn {
+        x1[n+31] = (x1[n+3] + x1[n]) & 0x1;
+        x2[n+31] = (x2[n+3] + x2[n+2] + x2[n+1] + x2[n]) & 0x1;
+    }
+
+    for n in 0 .. M_pn {
+        c[n] = (x1[n+Nc] + x2[n+Nc]) & 0x1;
+    }
+    return c;
+}
+
+// 5.3.1 Scrambling of the Physical uplink shared channel
+fn scramble_pusch(phy_layer: &PhysicalLayer) {
+    let i: usize = 0;
+    let Mbit = phy_layer.codeword_q.len();
+
+    while (i < Mbit) {
+        if phy_layer.codeword_q
+    }
+}
+
+fn scramble_pucch(phy_layer: &PhysicalLayer) {
+    // TODO
+}
+
+// 6.6.1 PBCH Scrambling
+fn scramble_pbch(phy_layer: &PhysicalLayer) {
+    let c_init: u32 = phy_layer.RadioFrame.N_cell_id;
+    let Mbit = phy_layer.codeword_q.len(); // 1920
+    let i: usize = 0;
+    let c: Vec<u32> = generate_prs(Mbit, c_init);
+
+    // _b[i] = (b[i]+c[i])mod2
+    for i in 0 .. Mbit {
+        phy_layer.scrambled_bits.push((phy_layer.codeword[i] + c[i]) & 0x1);
+    }
+}
+
+fn scramble_pcfich(phy_layer: &PhysicalLayer) {
+    // TODO
+}
+
+fn scramble_pdcch(phy_layer: &PhysicalLayer) {
+    // TODO
 }
