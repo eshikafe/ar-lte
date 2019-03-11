@@ -11,7 +11,7 @@ pub enum ModulationType {
     ModType64QAM,
 }
 
-pub const NC: u32 = 1600;
+pub const Nc: u32 = 1600;
 
 // Modulation symbol x = I+jQ
 pub struct IQ {
@@ -45,13 +45,13 @@ pub enum Direction {
 }
 
 pub struct RadioFrame {
-    N_cell_id: u32,
+    pub N_cell_id: u32,
 }
 
 pub struct PhysicalLayer {
-    channel_type: PhysicalChannel,
-    direction: Direction,
-    scrambled_bits: Vec<u32>,
-    codeword_q: Vec<u32>,
-    radio_frame: RadioFrame,
+    pub channel_type: PhysicalChannel,
+    pub direction: Direction,
+    pub scrambled_bits: Vec<u32>,
+    pub codeword_q: Vec<u32>,
+    pub radio_frame: RadioFrame,
 }
