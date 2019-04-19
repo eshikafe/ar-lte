@@ -11,11 +11,7 @@
 pub mod ts_36_211; // Physical channels and modulation
 pub use ts_36_211::common::*;
 pub use ts_36_211::*;
-// pub use ts_36_211::modulation;
-// pub use ts_36_211::layer_mapping;
-// pub use ts_36_211::precoding;
-// pub use ts_36_211::re_mapping;
-// pub use ts_36_211::ofdm;
+
 
 pub mod ts_36_212; // Multiplexing and channel coding
 pub mod ts_36_213; // Physical layer for relaying operation
