@@ -33,7 +33,7 @@ pub const PDCP_D_C_DATA_PDU: u8 = 1;
 enum pdu_type {
     PDU_TYPE_STATUS_REPORT = 0,
     PDU_TYPE_ROHC_FEEDBACK_PKT = 1,
-    /* 010 - 111 are reserved */
+    // 010 - 111 are reserved
 }
 
 // 6.3.14 SDU Type 
