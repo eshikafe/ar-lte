@@ -8,10 +8,9 @@
 //      3GPP TS 36.214 
 
 // LTE
-pub mod ts_36_211; // Physical channels and modulation
-pub use ts_36_211::common::*;
+pub use ts_36_211::phy_common::*;
 pub use ts_36_211::*;
-
+pub mod ts_36_211; // Physical channels and modulation
 
 pub mod ts_36_212; // Multiplexing and channel coding
 pub mod ts_36_213; // Physical layer for relaying operation
