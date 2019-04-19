@@ -1,12 +1,12 @@
 % Copyright (c) 2018 Aigbe Research
-% ar_lte_security_ts33401.erl
+% ar_ts33401.erl
 %
 % Compliance: 
 %    3GPP TS 33.401 version 12.13.0 Release 12
 %    3GPP TS 33.220 V12.3.0
 %    3GPP TS 35.215 V15.0.0 (2018-06)
 
--module(ar_lte_security_ts33401).
+-module(ar_ts33401).
 
 -export([kdf/3]).
 

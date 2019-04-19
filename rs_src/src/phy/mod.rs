@@ -8,19 +8,23 @@
 //      3GPP TS 36.214 
 
 // LTE
-pub mod ts36211; // Physical channels and modulation
-pub use ts36211::common::*;
-pub use ts36211::scrambling;
-pub use ts36211::modulation;
-pub use ts36211::layer_mapping;
-pub use ts36211::precoding;
-pub use ts36211::re_mapping;
-pub use ts36211::ofdm;
+pub mod ts_36_211; // Physical channels and modulation
+pub use ts_36_211::common::*;
+pub use ts_36_211::*;
+// pub use ts_36_211::modulation;
+// pub use ts_36_211::layer_mapping;
+// pub use ts_36_211::precoding;
+// pub use ts_36_211::re_mapping;
+// pub use ts_36_211::ofdm;
 
-pub mod ts36212; // Multiplexing and channel coding
-pub mod ts36213; // Physical layer for relaying operation
-pub mod ts36214; // Physical layer procedures
-pub mod ts36216; // Physical layer - Measurements
+pub mod ts_36_212; // Multiplexing and channel coding
+pub mod ts_36_213; // Physical layer for relaying operation
+pub mod ts_36_214; // Physical layer procedures
+pub mod ts_36_216; // Physical layer - Measurements
 
 // 5G NR
-
+// ts_38_211	NR - Physical channels and modulation
+// ts_38_212	NR - Multiplexing and channel coding
+// ts_38_213	NR - Physical layer procedures for control
+// ts_38_214	NR - Physical layer procedures for data
+// ts_38_215	NR - Physical layer measurements
