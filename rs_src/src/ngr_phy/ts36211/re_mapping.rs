@@ -1,1 +1,0 @@
-// Mapping to resource element
