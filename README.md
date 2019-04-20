@@ -9,7 +9,7 @@ Work in progress!
 
 Goals
 -----------
-- Demystify and optimize the 3GPP 4G/5G physical layer signal processing in the most energy-efficient way.
+- Demystify and optimize the 3GPP LTE/NR physical layer signal processing in the most energy-efficient way.
 - Implement the 3GPP LTE/5G RAN Technical Specifications in Rust. 
 
 
