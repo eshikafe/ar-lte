@@ -13,8 +13,15 @@ Goals
 - Implement the 3GPP LTE/5G RAN Technical Specifications in Rust. 
 
 
-Run
+Test
 -----
 
     $ cd rs_src\src
-    $ cargo run
+    $ cargo run --bin ar_enb
+
+Build
+-----
+
+    $ cd rs_src\src
+    $ cargo build --all
+    
