@@ -1,10 +1,10 @@
 
 // LTE/NR Library Module
 
-mod rrc;
-mod pdcp;
+pub mod rrc;
+pub mod pdcp;
 //mod rlc;
 //mod mac;
-mod phy;
+pub mod phy;
 
 

@@ -4,6 +4,12 @@
 
 // scrambling of coded bits in each of the codewords to be transmitted on a physical channel
 
+
+#[allow(dead_code)]
+#[allow(non_snake_case)]
+#[allow(unused_variables)]
+#[allow(non_upper_case_globals)]
+
 use crate::phy::common::*;
 
 pub fn run(phy_layer: &mut PhysicalLayer) {

@@ -6,9 +6,11 @@
 #[allow(unused_variables)]
 #[allow(non_upper_case_globals)]
 
-mod rrc;
-mod pdcp;
-mod phy;
+extern crate ngr;
+
+use ngr::rrc;
+use ngr::pdcp;
+use ngr::phy;
 
 
 fn main() {
