@@ -1,5 +1,6 @@
-//#[macro_use]
-//extern crate lazy_static;
+// ar_enb: LTE eNodeB implementation in Rust
+
+
 #[allow(dead_code)]
 #[allow(non_snake_case)]
 #[allow(unused_variables)]
@@ -18,4 +19,3 @@ fn main() {
     println!("\nAfter\ncodeword: {:?}\nscrambled bits {:?}", l1.codeword, l1.scrambled_bits);
 
 }
-

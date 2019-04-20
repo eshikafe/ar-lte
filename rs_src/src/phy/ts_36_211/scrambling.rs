@@ -4,7 +4,7 @@
 
 // scrambling of coded bits in each of the codewords to be transmitted on a physical channel
 
-use super::common::*;
+use crate::phy::common::*;
 
 pub fn run(phy_layer: &mut PhysicalLayer) {
     match phy_layer.channel_type {

@@ -8,7 +8,7 @@
 //      3GPP TS 36.214 
 
 // LTE
-pub use ts_36_211::phy_common::*;
+pub mod common;
 pub use ts_36_211::*;
 pub mod ts_36_211; // Physical channels and modulation
 

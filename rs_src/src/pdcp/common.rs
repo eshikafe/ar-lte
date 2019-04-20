@@ -1,6 +1,9 @@
 // Copyright (c) 2016 Aigbe Research
 
 
+// rrc pdcp-config;
+use crate::rrc::common as rrc;
+
 // 6.3.6 R
 pub const R: u8 = 0b0;
 
@@ -20,11 +23,11 @@ pub const MAX_PDCP_SN_5: u8 = 31;
 
 
 pub enum Sfn {
-    SFN_16 = 0,
-    SFN_15,
-    SFN_12,
-    SFN_7,
-    SFN_5
+    Sfn16 = 0,
+    Sfn15,
+    Sfn12,
+    Sfn7,
+    Sfn5
 }
 
 pub const PDCP_USER_PLANE: u8 = 0;
@@ -39,28 +42,27 @@ pub const PDCP_D_C_DATA_PDU: u8 = 1;
 
 // 6.3.8 PDU Type
 enum PduType {
-    PDU_TYPE_STATUS_REPORT = 0b000,
-    PDU_TYPE_ROHC_FEEDBACK_PKT = 0b001,
-    PDU_TYPE_LWA_STATUS_REPORT = 0b010, // Rel 14
-    PDU_TYPE_LWA_END_MARKER_PKT = 0b011, // Rel 14
+    PduTypeStatusReport = 0b000,
+    PduTypeRohcFeedbackPkt = 0b001,
+    PduTypeLwaStatusReport = 0b010, // Rel 14
+    PduTypeLwaEndMarkerPkt = 0b011, // Rel 14
     // 111 are reserved
 }
 
 // 6.3.14 SDU Type 
 enum SduType {
-    SDU_TYPE_IP = 0,
-    SDU_TYPE_ARP = 1
-};
+    SduTypeIp = 0,
+    SduTypeArp = 1
+}
 
 // 4.3.1
 pub const MAX_PDCP_SDU: u32 = 8188 * 8;
 
-use super::rrc;
-
 struct PdcpEntity {
     // 7.1 State variables
     
-    pdcp_config: RrcPdcpConfig,
+    // pdcp config from upper layer (RRC)
+    pdcp_config: rrc::PdcpConfig,
     //the PDCP SN of the next PDCP SDU for a given 
     // PDCP entity
     next_pdcp_tx_sn: u32,

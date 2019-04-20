@@ -14,7 +14,6 @@
 
 // Roadmap: GPU support for baseband processing
 
-pub mod phy_common;
 pub mod scrambling;
 pub mod modulation;
 pub mod layer_mapping;

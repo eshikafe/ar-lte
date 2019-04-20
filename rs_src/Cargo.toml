@@ -4,3 +4,14 @@ version = "0.1.0"
 authors = ["Aigbe Research"]
 edition = "2018"
 
+[lib]
+name = "ngr"
+path = "src/lib.rs"
+
+[[bin]]
+name = "ar_enb"
+path = "src/ar_enb/main.rs"
+
+[[bin]]
+name = "ar_gnb"
+path = "src/ar_gnb/main.rs"

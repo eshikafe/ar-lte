@@ -5,4 +5,5 @@
 // Reference Document:
 //   3GPP TS 36.323, 3GPP Release 12.2.0
 
-pub mod pdcp_common;
+pub mod header_comp;
+pub mod header_decomp;
