@@ -34,15 +34,16 @@ pub const ALGO_ID_128_EEA3: u8 = 3;
 // 	crypto:hmac(sha256, Key, Data, 16)
 // }
 
+
 // Key Derivation Function (KDF)
 // Inputs: k_enb (256 bits), algo_type (8 bits), algo_id (8 bits)
 // Output keys (128 bits): KRRCint, KRRCenc, KUPint or KUPenc
 pub fn kdf(k_enb: Vec<u128>, algo_type: u8, algo_id: u8) -> u64 {
 	let fc: u64 = 15; 
 	let p0: u64 = algo_type as u64;  // algorithm type distinguisher
-	let l0: u64 = 1;     // length of algorithm type distinguisher (i.e 0x00 0x01)
+	let l0: u64 = 1;                 // length of algorithm type distinguisher (i.e 0x00 0x01)
 	let p1: u64 = algo_id as u64;    // algorithm identity
-	let l1: u64 = 1;     // length of algorithm identity (i.e. 0x00 0x01)
+	let l1: u64 = 1;                 // length of algorithm identity (i.e. 0x00 0x01)
 
     // S = FC || P0 || L0 || P1 || L1 || P2 || L2 || P3 || L3 ||... || Pn || Ln */
     let s: u64 = (fc << 56 | p0 << 48 | l0 << 32 | p1 << 24 | l1 << 8) & 0xffffffffffffff00; 
