@@ -1,8 +1,11 @@
 // Copyright (c) 2016 Aigbe Research
 
 
-// rrc pdcp-config;
+// RRC pdcp-config for configuring the PDCP layer
 use crate::rrc::common as rrc;
+
+// Crate for RoHC in the PDCP layer
+use crate::rohc::*;
 
 // 6.3.6 R
 pub const R: u8 = 0b0;
