@@ -12,9 +12,9 @@ name = "ngr"
 path = "src/lib.rs"
 
 [[bin]]
-name = "ar_enb"
+name = "enb"
 path = "src/ar_enb/main.rs"
 
 [[bin]]
-name = "ar_gnb"
+name = "gnb"
 path = "src/ar_gnb/main.rs"
