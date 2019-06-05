@@ -8,8 +8,6 @@
 use hmac_sha256::*;
 
 // Table A.7-1: Algorithm type distinguishers
-// const ALG_TYPE_NAS_ENC: u8 = 0x01;
-// const ALG_TYPE_NAS_INT: u8 = 0x02;
 const ALG_TYPE_RRC_ENC: u8 = 0x03;
 const ALG_TYPE_RRC_INT: u8 = 0x04;
 const ALG_TYPE_UP_ENC: u8 = 0x05;
