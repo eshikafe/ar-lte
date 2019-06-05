@@ -6,6 +6,7 @@
 //    3GPP TS 35.215 V15.0.0 (2018-06)
 
 use hmac_sha256::*;
+use std::convert::TryFrom;
 
 // Table A.7-1: Algorithm type distinguishers
 const ALG_TYPE_RRC_ENC: u8 = 0x03;
@@ -29,8 +30,7 @@ const ALGO_ID_128_EEA3: u8 = 3;
 
 
 fn kdf(key: &[u8], s: &[u8]) -> [u8; 32] {
- 	let h = HMAC::mac(s, key);
-    return h; // 256 bits
+ 	HMAC::mac(s, key) // 256 bits
  }
 
 
@@ -44,29 +44,29 @@ fn algo_kdf(k_enb: &[u8], algo_type: u8, algo_id: u8) -> [u8; 32] {
 
     // S = FC || P0 || L0 || P1 || L1 || P2 || L2 || P3 || L3 ||... || Pn || Ln
     let s = &[fc, p0, l0[0], l0[1], p1, l1[0], l1[1]];  
-    return kdf(k_enb, s);
+    kdf(k_enb, s)
 }
 
 
 pub fn k_rrc_int_key(k_enb: &[u8]) -> [u8; 16] {
 	let k = algo_kdf(k_enb, ALG_TYPE_RRC_INT, ALGO_ID_128_EIA2);
-	return k[16..32]; // 128 bits
+	TryFrom::try_from(&k[16..32]).unwrap() // 256 bits -> 128 bits
 	
 }
 
 pub fn k_rrc_enc_key(k_enb: &[u8]) -> [u8; 16] {
 	let k = algo_kdf(k_enb, ALG_TYPE_RRC_ENC, ALGO_ID_128_EEA2);
-	return k[16..32];
+	TryFrom::try_from(&k[16..32]).unwrap()
 } 
 
 pub fn k_up_int_key(k_enb: &[u8]) -> [u8; 16] {
 	let k = algo_kdf(k_enb, ALG_TYPE_UP_INT, ALGO_ID_128_EIA2);
-	return k[16..32];
+	TryFrom::try_from(&k[16..32]).unwrap()
 }
 
 pub fn k_up_enc_key(k_enb: &[u8]) -> [u8; 16] {
 	let k = algo_kdf(k_enb, ALG_TYPE_UP_ENC, ALGO_ID_128_EEA2);
-	return k[16..32];
+	TryFrom::try_from(&k[16..32]).unwrap()
 }
 
 // Ciphering algorithm
