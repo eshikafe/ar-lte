@@ -6,7 +6,6 @@
 //    3GPP TS 35.215 V15.0.0 (2018-06)
 
 use hmac_sha256::*;
-use std::convert::TryFrom;
 
 // Table A.7-1: Algorithm type distinguishers
 const ALG_TYPE_RRC_ENC: u8 = 0x03;
@@ -50,22 +49,30 @@ fn algo_kdf(k_enb: &[u8], algo_type: u8, algo_id: u8) -> [u8; 32] {
 
 pub fn k_rrc_int_key(k_enb: &[u8]) -> [u8; 16] {
     let k = algo_kdf(k_enb, ALG_TYPE_RRC_INT, ALGO_ID_128_EIA2);
-    TryFrom::try_from(&k[16..32]).unwrap() // 256 bits -> 128 bits	
+    let mut k_rrcint: [u8; 16] = Default::default();
+    k_rrcint.clone_from_slice(&k[16..32]); // Truncate 256 bits to 128 bits
+    k_rrcint 	
 }
 
 pub fn k_rrc_enc_key(k_enb: &[u8]) -> [u8; 16] {
     let k = algo_kdf(k_enb, ALG_TYPE_RRC_ENC, ALGO_ID_128_EEA2);
-    TryFrom::try_from(&k[16..32]).unwrap()
+    let mut k_rrcenc: [u8; 16] = Default::default();
+    k_rrcenc.clone_from_slice(&k[16..32]);
+    k_rrcenc
 } 
 
 pub fn k_up_int_key(k_enb: &[u8]) -> [u8; 16] {
     let k = algo_kdf(k_enb, ALG_TYPE_UP_INT, ALGO_ID_128_EIA2);
-    TryFrom::try_from(&k[16..32]).unwrap()
+    let mut k_upint: [u8; 16] = Default::default();
+    k_upint.clone_from_slice(&k[16..32]); 
+    k_upint
 }
 
 pub fn k_up_enc_key(k_enb: &[u8]) -> [u8; 16] {
     let k = algo_kdf(k_enb, ALG_TYPE_UP_ENC, ALGO_ID_128_EEA2);
-    TryFrom::try_from(&k[16..32]).unwrap()
+    let mut k_upenc: [u8; 16] = Default::default();
+    k_upenc.clone_from_slice(&k[16..32]);
+    k_upenc
 }
 
 // Ciphering algorithm
