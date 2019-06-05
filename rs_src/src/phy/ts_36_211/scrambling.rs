@@ -10,7 +10,7 @@
 #[allow(unused_variables)]
 #[allow(non_upper_case_globals)]
 
-use crate::phy::common::*;
+use crate::phy::*;
 
 pub fn run(phy_layer: &mut PhysicalLayer) {
     match phy_layer.channel_type {
