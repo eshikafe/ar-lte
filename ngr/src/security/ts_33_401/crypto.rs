@@ -30,7 +30,7 @@ const ALGO_ID_128_EEA3: u8 = 3;
 
 
 fn kdf(key: &[u8], s: &[u8]) -> [u8; 32] {
- 	HMAC::mac(s, key) // 256 bits
+    HMAC::mac(s, key) // 256 bits
  }
 
 
