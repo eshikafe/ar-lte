@@ -20,5 +20,7 @@ fn main() {
     // println!("\nBefore\ncodeword: {:?}\nscrambled bits {:?}", l1.codeword, l1.scrambled_bits);
     // phy::scrambling::run(&mut l1);
     // println!("\nAfter\ncodeword: {:?}\nscrambled bits {:?}", l1.codeword, l1.scrambled_bits);
-
+    let kenb: &[u8] = &[0u8; 32];
+    let k: [u8; 16] = k_rrc_int_key(kenb);
+    println!("{:?}", k);
 }
