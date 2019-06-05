@@ -50,8 +50,7 @@ fn algo_kdf(k_enb: &[u8], algo_type: u8, algo_id: u8) -> [u8; 32] {
 
 pub fn k_rrc_int_key(k_enb: &[u8]) -> [u8; 16] {
 	let k = algo_kdf(k_enb, ALG_TYPE_RRC_INT, ALGO_ID_128_EIA2);
-	TryFrom::try_from(&k[16..32]).unwrap() // 256 bits -> 128 bits
-	
+	TryFrom::try_from(&k[16..32]).unwrap() // 256 bits -> 128 bits	
 }
 
 pub fn k_rrc_enc_key(k_enb: &[u8]) -> [u8; 16] {
