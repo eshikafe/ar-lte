@@ -36,11 +36,11 @@ fn kdf(key: &[u8], s: &[u8]) -> [u8; 32] {
 
 // A.7 Algorithm Key Derivation Functions
 fn algo_kdf(k_enb: &[u8], algo_type: u8, algo_id: u8) -> [u8; 32] {
-	let fc: u8 = 0x15; 
-	let p0: u8 = algo_type;            // algorithm type distinguisher
-	let l0: [u8;2] = [0x00, 0x01];     // length of algorithm type distinguisher (i.e 0x00 0x01)
-	let p1: u8 = algo_id;              // algorithm identity
-	let l1: [u8;2] = [0x00, 0x01];     // length of algorithm identity (i.e. 0x00 0x01)
+    let fc: u8 = 0x15; 
+    let p0: u8 = algo_type;            // algorithm type distinguisher
+    let l0: [u8;2] = [0x00, 0x01];     // length of algorithm type distinguisher (i.e 0x00 0x01)
+    let p1: u8 = algo_id;              // algorithm identity
+    let l1: [u8;2] = [0x00, 0x01];     // length of algorithm identity (i.e. 0x00 0x01)
 
     // S = FC || P0 || L0 || P1 || L1 || P2 || L2 || P3 || L3 ||... || Pn || Ln
     let s = &[fc, p0, l0[0], l0[1], p1, l1[0], l1[1]];  
@@ -49,23 +49,23 @@ fn algo_kdf(k_enb: &[u8], algo_type: u8, algo_id: u8) -> [u8; 32] {
 
 
 pub fn k_rrc_int_key(k_enb: &[u8]) -> [u8; 16] {
-	let k = algo_kdf(k_enb, ALG_TYPE_RRC_INT, ALGO_ID_128_EIA2);
-	TryFrom::try_from(&k[16..32]).unwrap() // 256 bits -> 128 bits	
+    let k = algo_kdf(k_enb, ALG_TYPE_RRC_INT, ALGO_ID_128_EIA2);
+    TryFrom::try_from(&k[16..32]).unwrap() // 256 bits -> 128 bits	
 }
 
 pub fn k_rrc_enc_key(k_enb: &[u8]) -> [u8; 16] {
-	let k = algo_kdf(k_enb, ALG_TYPE_RRC_ENC, ALGO_ID_128_EEA2);
-	TryFrom::try_from(&k[16..32]).unwrap()
+    let k = algo_kdf(k_enb, ALG_TYPE_RRC_ENC, ALGO_ID_128_EEA2);
+    TryFrom::try_from(&k[16..32]).unwrap()
 } 
 
 pub fn k_up_int_key(k_enb: &[u8]) -> [u8; 16] {
-	let k = algo_kdf(k_enb, ALG_TYPE_UP_INT, ALGO_ID_128_EIA2);
-	TryFrom::try_from(&k[16..32]).unwrap()
+    let k = algo_kdf(k_enb, ALG_TYPE_UP_INT, ALGO_ID_128_EIA2);
+    TryFrom::try_from(&k[16..32]).unwrap()
 }
 
 pub fn k_up_enc_key(k_enb: &[u8]) -> [u8; 16] {
-	let k = algo_kdf(k_enb, ALG_TYPE_UP_ENC, ALGO_ID_128_EEA2);
-	TryFrom::try_from(&k[16..32]).unwrap()
+    let k = algo_kdf(k_enb, ALG_TYPE_UP_ENC, ALGO_ID_128_EEA2);
+    TryFrom::try_from(&k[16..32]).unwrap()
 }
 
 // Ciphering algorithm
