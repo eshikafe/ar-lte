@@ -4,6 +4,9 @@ version = "0.1.0"
 authors = ["Aigbe Research"]
 edition = "2018"
 
+[dependencies]
+hmac-sha256 = "*"
+
 [lib]
 name = "ngr"
 path = "src/lib.rs"
