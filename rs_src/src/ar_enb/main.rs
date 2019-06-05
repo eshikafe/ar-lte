@@ -13,6 +13,7 @@ extern crate ngr;
 // use ngr::phy;
 use ngr::security::*;
 
+
 fn main() {
     // let mut l1 = phy::PhysicalLayer::new();
     
@@ -20,8 +21,4 @@ fn main() {
     // phy::scrambling::run(&mut l1);
     // println!("\nAfter\ncodeword: {:?}\nscrambled bits {:?}", l1.codeword, l1.scrambled_bits);
 
-    let kenb: Vec<u128> = vec![45; 2];
-    let k: u64;
-    k = kdf(kenb, ALGO_TYPE_RRC_INT, ALGO_ID_128_EIA2);
-    println!("k: 0x0{:x}", k);
 }
