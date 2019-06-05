@@ -13,8 +13,8 @@ path = "src/lib.rs"
 
 [[bin]]
 name = "enb"
-path = "src/ar_enb/main.rs"
+path = "src/enb/main.rs"
 
 [[bin]]
 name = "gnb"
-path = "src/ar_gnb/main.rs"
+path = "src/gnb/main.rs"
