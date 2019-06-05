@@ -17,3 +17,7 @@ _build
 *.iml
 rebar3.crashdump
 target
+*.ipch
+*.bin
+*.lock
+*.lock
