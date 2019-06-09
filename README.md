@@ -10,18 +10,22 @@ Work in progress!
 Goals
 -----------
 - Demystify and optimize the 3GPP LTE/NR physical layer signal processing in the most energy-efficient way.
-- Implement the 3GPP LTE/5G RAN Technical Specifications in Rust. 
+- Implement the 3GPP LTE/5G RAN Technical Specifications in Rust.
+
+
+Roadmap
+------------
+- GPGPU-based baseband processing
+- Optimized algorithms for baseband processing
 
 
 Test
 -----
-
-    $ cd rs_src\src
-    $ cargo run --bin ar_enb
+- Not ready
 
 Build
 -----
 
-    $ cd rs_src\src
+    $ cd ngr\src
     $ cargo build --all
     
