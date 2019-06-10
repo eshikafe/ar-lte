@@ -3,7 +3,8 @@
 [![Build Status](https://travis-ci.org/eshikafe/ngr.svg?branch=master)](https://travis-ci.org/eshikafe/ngr)
 
 ngr: Next Generation Radio
-*4G/5G Radio signal processing in Rust
+
+4G/5G Radio signal processing in Rust
 
 Work in progress!
 
