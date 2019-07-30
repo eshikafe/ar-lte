@@ -75,16 +75,19 @@ pub fn k_up_enc_key(k_enb: &[u8]) -> [u8; 16] {
     k_upenc
 }
 
-// Ciphering algorithm
+// B.1 128-bit ciphering algorithm 
 // used by the PDCP layer to encrypt the data part of the PDCP PDU
-// Key: 128 bits
-// Count: 32 bits
-// Bearer: 5 bits
-// Direction: 1 bit (0 - uplink, 1 - downlink)
-// Length: length(Msg)
- //fn eea2_128_enc(key: &[u8], count: u32, bearer: u8, direction: bool, length: u32, data: &[u8]) {
- //	
- //}
+// Input:
+// 	Key: 128 bits
+// 	Count: 32 bits
+// 	Bearer: 5 bits
+// 	Direction: 1 bit (0 - uplink, 1 - downlink)
+// 	Length: length(Msg)
+// Ouput:
+//  KeyStream Block: Length bits
+ fn eea2_128_enc(key: &[u8], count: u32, bearer: u8, direction: bool, length: u32, data: &[u8]) {
+ 
+ }
 
  // Integrity
  //fn eia2_128_int(Key, Count, Bearer, Direction, Length, Data) -> u128 {
