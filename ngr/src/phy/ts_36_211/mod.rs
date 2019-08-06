@@ -1,4 +1,4 @@
-//   Copyright (c) 2019 Aigbe Research
+//   Copyright (c) 2019 AR
 //   ts_36211.rs
 //   TS 36.211: Physical channels and modulation 
 //
