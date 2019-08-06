@@ -1,6 +1,6 @@
 //   Copyright (c) 2019 AR
 //   ts_36211.rs
-//   TS 36.211: Physical channels and modulation 
+//   TS 36.211: Physical channels and modulation
 //
 //  Physical layer processing:
 // 	  scrambling
@@ -14,18 +14,16 @@
 
 // Roadmap: GPU support for baseband processing
 
-pub mod scrambling;
-pub mod modulation;
 pub mod layer_mapping;
+pub mod modulation;
+pub mod ofdm;
 pub mod precoding;
 pub mod re_mapping;
-pub mod ofdm;
-
+pub mod scrambling;
 
 // pub fn scramble(phy_layer: &mut PhysicalLayer){
 //     scrambling::run(phy_layer);
 // }
-
 
 // pub fn demodulate() {
 
@@ -46,7 +44,3 @@ pub mod ofdm;
 // pub fn re_map() {
 //     // TODO
 // }
-        
-    
-
-               

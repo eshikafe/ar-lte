@@ -5,10 +5,6 @@
 //  advancements in relation to:
 //  - Physical Channels and Modulation;
 //  - Multiplexing and channel coding;
-//  - Relay Node procedures. 
+//  - Relay Node procedures.
 //
 // Reference: 3GPP TS 36.201 version 12.2.0 Release 12, Section 5.7
-
-
-
-

@@ -1,15 +1,13 @@
 //   Copyright (c) 2019 Aigbe Research
 //   scrambling.rs
-//   TS 36.211: Physical channels and modulation 
+//   TS 36.211: Physical channels and modulation
 
 // scrambling of coded bits in each of the codewords to be transmitted on a physical channel
-
 
 #[allow(dead_code)]
 #[allow(non_snake_case)]
 #[allow(unused_variables)]
 #[allow(non_upper_case_globals)]
-
 use crate::phy::*;
 
 pub fn run(phy_layer: &mut PhysicalLayer) {
@@ -18,7 +16,7 @@ pub fn run(phy_layer: &mut PhysicalLayer) {
         PhysicalChannel::PUCCH => scramble_pucch(phy_layer),
         PhysicalChannel::PBCH => scramble_pbch(phy_layer),
         PhysicalChannel::PCFICH => scramble_pcfich(phy_layer),
-        PhysicalChannel::PDCCH => scramble_pdcch(phy_layer), 
+        PhysicalChannel::PDCCH => scramble_pdcch(phy_layer),
         _ => println!("scrambling not implemented"),
     }
 }
@@ -32,22 +30,22 @@ fn generate_prs(Mpn: usize, c_init: u32) -> Vec<u32> {
     let mut x2: Vec<u32> = vec![0; Mpn + Nc as usize + 31];
     let mut c = vec![0; Mpn];
     let n: usize = 0;
-    
+
     // Convert c_init to block of bits and initialize
-    // x2 with the first 31 bits of c_init 
-    for n in 0 ..= 30 {
+    // x2 with the first 31 bits of c_init
+    for n in 0..=30 {
         x2[n] = (c_init >> n) & 0x1;
     }
-    
+
     x1[0] = 1;
 
-    for n in 0 .. Nc as usize + Mpn {
-        x1[n+31] = (x1[n+3] + x1[n]) & 0x1;
-        x2[n+31] = (x2[n+3] + x2[n+2] + x2[n+1] + x2[n]) & 0x1;
+    for n in 0..Nc as usize + Mpn {
+        x1[n + 31] = (x1[n + 3] + x1[n]) & 0x1;
+        x2[n + 31] = (x2[n + 3] + x2[n + 2] + x2[n + 1] + x2[n]) & 0x1;
     }
 
-    for n in 0 .. Mpn {
-        c[n] = (x1[n+Nc as usize] + x2[n+Nc as usize]) & 0x1;
+    for n in 0..Mpn {
+        c[n] = (x1[n + Nc as usize] + x2[n + Nc as usize]) & 0x1;
     }
     return c;
 }
@@ -67,12 +65,15 @@ fn scramble_pusch(phy_layer: &mut PhysicalLayer) {
     let y = 0;
     // Scrambling algorithm for PUSCH
     while i < Mbit {
-        if phy_layer.codeword[i] == x { // ACK/NACK or Rank Indication placeholder bits 
+        if phy_layer.codeword[i] == x {
+            // ACK/NACK or Rank Indication placeholder bits
             phy_layer.scrambled_bits[i] = 0;
         } else {
-            if phy_layer.codeword[i] == y {  // ACK/NACK or Rank Indication repetition placeholder bits 
-                phy_layer.scrambled_bits[i] = phy_layer.scrambled_bits[i-1];
-            } else { // Data or channel quality coded bits, Rank Indication coded bits or ACK/NACK coded bits 
+            if phy_layer.codeword[i] == y {
+                // ACK/NACK or Rank Indication repetition placeholder bits
+                phy_layer.scrambled_bits[i] = phy_layer.scrambled_bits[i - 1];
+            } else {
+                // Data or channel quality coded bits, Rank Indication coded bits or ACK/NACK coded bits
                 phy_layer.scrambled_bits[i] = (phy_layer.codeword[i] + c[i]) & 01;
             }
         }
@@ -93,7 +94,7 @@ fn scramble_pbch(phy_layer: &mut PhysicalLayer) {
     println!("pseudo random sequence = {:?}", c);
 
     // _b[i] = (b[i]+c[i])mod2
-    for i in 0 .. Mbit {
+    for i in 0..Mbit {
         phy_layer.scrambled_bits[i] = (phy_layer.codeword[i] + c[i]) & 0x1;
     }
 }

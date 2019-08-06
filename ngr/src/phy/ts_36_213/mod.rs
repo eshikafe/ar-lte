@@ -9,14 +9,13 @@
 //  - Physical uplink shared channel related procedures, including UE sounding and HARQ ACK/NACK detection;
 //  - Physical shared control channel procedures, including assignment of shared control channels;
 //  - Physical multicast channel related procedures;
-//  - ProSe related procedures. 
- 
+//  - ProSe related procedures.
+
 // Reference: 3GPP TS 36.201 version 12.2.0 Release 12, Section 5.5
 
-
-mod power_control_proc;
-mod rand_access_proc;
 mod pdsch_proc;
-mod pusch_proc;
-mod pscch_proc;
 mod pmch_proc;
+mod power_control_proc;
+mod pscch_proc;
+mod pusch_proc;
+mod rand_access_proc;
