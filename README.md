@@ -6,7 +6,7 @@ ngr: Next Generation Radio
 
 4G/5G Radio signal processing in Rust
 
-Work in progress!
+R&D
 
 Goals
 -----------
@@ -16,17 +16,20 @@ Goals
 
 Roadmap
 ------------
-- GPGPU-based baseband processing
-- Optimized algorithms for baseband processing
+- GPGPU-based baseband processing.
+- Optimized algorithms for baseband processing.
+- Containerize baseband processing unit with Docker.
+- DPDK support for s1-U packet processing and forwarding.
 
 
 Test
 -----
 - Not ready
+- Should be as simple as 'cargo test'
 
 Build
 -----
 
-    $ cd ngr\src
-    $ cargo build --all
+- Not ready
+- Should be as simple as 'cargo build' 
     
