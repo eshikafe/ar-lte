@@ -18,7 +18,7 @@ Roadmap
 ------------
 - GPGPU-based baseband processing.
 - Optimized algorithms for baseband processing.
-- Containerize baseband processing unit with Docker.
+- Containerized baseband processing unit with Docker.
 - DPDK support for s1-U packet processing and forwarding.
 
 
