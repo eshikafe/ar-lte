@@ -2,6 +2,5 @@ language: rust
 rust:
   - 1.33.0
 
-before_script: cd ngr
 script:
   cargo build --verbose --all
