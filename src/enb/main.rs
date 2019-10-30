@@ -7,10 +7,6 @@
 #[allow(unused_imports)]
 
 extern crate ngr;
-
-// use ngr::rrc;
-// use ngr::pdcp;
-// use ngr::phy;
 use ngr::security::*;
 
 
