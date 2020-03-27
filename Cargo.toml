@@ -1,20 +1,12 @@
-[package]
-name = "ngr"
-version = "0.1.0"
-authors = ["AR"]
-edition = "2018"
-
-[dependencies]
-hmac-sha256 = "*"
-
-[lib]
-name = "ngr"
-path = "src/lib.rs"
-
-[[bin]]
-name = "ar_enb"
-path = "enb/main.rs"
-
-[[bin]]
-name = "ar_gnb"
-path = "gnb/main.rs"
+[workspace]
+members = [
+    "src/ts",
+    "src/enb",
+    "src/gnb",
+    "src/cpri",
+    "src/asn1",
+    "src/rrc",
+    "src/pdcp",
+    "src/phy",
+    "src/rlc"
+]
